@@ -1,6 +1,7 @@
 <template>
   <div class="Home">
-    <SigninButton />
+    <SigninButtonMicrosoft />
+    <SigninButtonGoogle />
     <br />
     <p v-if="user">Bienvenue, {{ user.name }}!</p>
     <p v-else>Veuillez vous connecter pour continuer.</p>
@@ -15,13 +16,15 @@
 </template>
 
 <script>
-import SigninButton from '../components/SigninButton_Microsoft.vue';
+import SigninButtonMicrosoft from '../components/SigninButton_Microsoft.vue';
+import SigninButtonGoogle from '../components/SigninButton_Google.vue';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'HomePage',
   components: {
-    SigninButton
+    SigninButtonMicrosoft,
+    SigninButtonGoogle
   },
   data() {
     return {
