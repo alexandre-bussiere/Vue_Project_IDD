@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import SigninButton from '../components/SigninButton.vue';
+import SigninButton from '../components/SigninButton_Microsoft.vue';
 import { mapGetters } from 'vuex';
 
 export default {
