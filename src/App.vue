@@ -9,9 +9,11 @@
 <script>
 import base_layout from './components/base_layout.vue';
 
-export default {
+export default 
+{
   name: 'App',
-  components: { 
+  components: 
+  { 
     base_layout
   },
 };

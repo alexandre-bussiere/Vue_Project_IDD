@@ -1,20 +1,25 @@
 import { createStore } from 'vuex';
 
 const store = createStore({
-    state: {
+    state: 
+    {
         user: null,
         conversationTextId: null
     },
-    mutations: {
-        setUser(state, user) {
+    mutations: 
+    {
+        setUser(state, user) 
+        {
             state.user = user;
         },
-        setConversationTextId(state, id) {
+        setConversationTextId(state, id) 
+        {
             state.conversationTextId = id;
         }
 
     },
-    getters: {
+    getters: 
+    {
         isAuthenticated: (state) => !!state.user,
         getUser: (state) => state.user,
         getConversationTextId: (state) => state.conversationTextId

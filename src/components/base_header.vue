@@ -1,16 +1,6 @@
 <template>
   <header class="base-header">
     <nav>
-      <ul>
-        <li>
-          <router-link v-if="user" to="/conversations">Latest Conversations</router-link>
-          <router-link v-else to="/">Home</router-link>
-        </li>
-        <li><router-link v-if="user && conversationTextId" :to="{ name: 'ConversationShow', params: { id: conversationTextId } }">
-            Conversations
-          </router-link>
-        </li>
-      </ul>
     </nav>
   </header>  
 </template>
