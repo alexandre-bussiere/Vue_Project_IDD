@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="handleSignIn">Sign In</button>
+    <button :disabled="isDisabled" @click="handleSignIn">Sign In</button>
     <div v-if="user">
       <p>Logged in as: {{ user.name }}</p>
       <p>Email: {{ user.username }}</p>
@@ -15,7 +15,8 @@ import { mapMutations } from 'vuex';
 export default {
   data() {
     return {
-      user: null, // Stockage des informations utilisateur
+      user: null,
+      isDisabled: false,
     };
   },
   mounted() {
@@ -39,6 +40,7 @@ export default {
             name: user.name,
             username: user.username
           });
+          this.isDisabled = true;
         })
         .catch(error => {
           console.error("Error during sign-in:", error);
@@ -51,13 +53,30 @@ export default {
 
 <style scoped>
 button {
-  padding: 10px;
-  background-color: #4CAF50;
-  color: white;
+  background-color: #28a745;
   border: none;
-  cursor: pointer;
+  color: white; 
+  padding: 12px 24px; 
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  margin: 12px;
 }
+
 button:hover {
-  background-color: #45a049;
+  background-color: #32d755;
+  transform: translateY(-2px);
 }
+
+button:active {
+  background-color: #282d29;
+  transform: translateY(0);
+}
+
+button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed; 
+}
+
 </style>

@@ -1,7 +1,6 @@
 <template>
   <footer class="base-footer">
     <div class="footer-content">
-      <p>&copy; 2024 - Your Company. All Rights Reserved.</p>
       <nav>
         <ul>
           <li><a href="/privacy-policy">Privacy Policy</a></li>
@@ -9,6 +8,8 @@
           <li><a href="/contact">Contact Us</a></li>
         </ul>
       </nav>
+      <br/>
+      <p >&copy; 2024 - Your Company. All Rights Reserved.</p>
     </div>
   </footer>
 </template>
@@ -21,13 +22,15 @@ export default {
 
 <style scoped>
 .base-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   background-color: #343a40;
   color: #fff;
   padding: 1rem;
   text-align: center;
   border-top: 1px solid #ddd;
-
-  margin-top: 5rem;
 }
 
 .footer-content {

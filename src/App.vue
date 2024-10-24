@@ -1,20 +1,22 @@
 <template>
   <div id="app">
     <base_layout>
-      <router-view />
+      <HomePage/>
     </base_layout>
   </div>
 </template>
 
 <script>
 import base_layout from './components/base_layout.vue';
+import HomePage from './pages/HomePage.vue';
 
 export default 
 {
   name: 'App',
   components: 
   { 
-    base_layout
+    base_layout,
+    HomePage
   },
 };
 </script>

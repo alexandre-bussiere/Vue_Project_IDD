@@ -1,6 +1,14 @@
 <template>
   <header class="base-header">
     <nav>
+      <img id ="logo" src="../assets/free_logo_email.jpg" alt="description de l'image">
+      <ul>
+        <li>Home</li>
+        <li>Get Email</li>
+        <li>Send Email</li>
+        <li>Delete Email</li>
+      </ul>
+
     </nav>
   </header>  
 </template>
@@ -23,28 +31,36 @@ export default {
 </script>
 
 <style scoped>
+#logo
+{
+  background-color: #f8f9fa;
+  position:fixed;
+  top: 0;
+  left: 1%;
+  height: 80px;
+  /* width: 10%; */
+}
 .base-header {
   background-color: #f8f9fa;
-  padding: 1rem;
+  padding: 24px;
   border-bottom: 1px solid #ddd;
-
-  margin-bottom: 5rem;
+  position: fixed;
+  top: 0;
+  left:0;
+  width: 100%;
+  height: 32px;
+  /* margin-bottom: 5rem; */
 }
 
 nav ul {
   list-style: none;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
 }
 
-nav ul li a {
-  text-decoration: none;
-  color: #333;
-  font-weight: bold;
-}
-
-nav ul li a:hover {
-  color: #00438a;
+li
+{
+  margin-inline: 50px;
 }
 
 </style>
