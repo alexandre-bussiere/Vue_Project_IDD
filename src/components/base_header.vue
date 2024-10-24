@@ -1,7 +1,7 @@
 <template>
   <header class="base-header">
     <nav>
-      <img id ="logo" src="../assets/free_logo_email.jpg" alt="description de l'image">
+      <img id ="logo" src="../assets/Mail_Logo.png" alt="description de l'image">
       <ul>
         <li>Home</li>
         <li>Get Email</li>
@@ -41,7 +41,8 @@ export default {
   /* width: 10%; */
 }
 .base-header {
-  background-color: #f8f9fa;
+  background-color: #c8cacc;
+  color:#28a745;
   padding: 24px;
   border-bottom: 1px solid #ddd;
   position: fixed;
