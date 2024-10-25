@@ -38,7 +38,7 @@ export default {
   flex-direction: column;
   justify-content: center;  
   align-items: center;
-  height: 100px;
+  height: 00px;
   padding: 1rem;
   gap: 1rem;
   border: 1px solid #ddd;

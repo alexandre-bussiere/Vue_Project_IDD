@@ -8,6 +8,7 @@ const store = createStore({
     mutations: {
         setUser(state, user) {
             state.user = user;
+            console.log('User set:', user);
         },
         setConversationTextId(state, id) {
             state.conversationTextId = id;

@@ -2,6 +2,10 @@
   <div class="sign-in-container">
     <img class="logo" src="../assets/Microsoft_Logo_512px.png" alt="Microsoft logo" />
     <button @click="handleSignIn">Sign In with Microsoft</button>
+    <div v-if="user">
+      <p>Logged in as: {{ user.name }}</p>
+      <p>Email: {{ user.username }}</p>
+    </div>
   </div>
 </template>
 
@@ -26,6 +30,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setUser']),
+
     handleSignIn() {
       initialize()
         .then(() => {
@@ -40,7 +45,6 @@ export default {
         .catch(error => {
           console.error("Error during sign-in:", error);
         });
-    
     },
   },
 };
