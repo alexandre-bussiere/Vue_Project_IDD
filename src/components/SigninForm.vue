@@ -10,21 +10,17 @@
             <input type="submit" value="Login">
             <br />
             <div class="Extra-login">
-                <SigninButtonMicrosoft />
-                <SigninButtonGoogle />
+              <slot></slot>
             </div>
         </form>
     </div>
 </template>
 
 <script>
-import SigninButtonMicrosoft from './SigninButton_Microsoft.vue';
-import SigninButtonGoogle from './SigninButton_Google.vue';
+
 export default {
     name: 'SigninForm',
     components: {
-        SigninButtonGoogle,
-        SigninButtonMicrosoft
     },
     
 
@@ -38,7 +34,6 @@ export default {
   flex-direction: column;
   justify-content: center;  
   align-items: center;
-  height: 00px;
   padding: 1rem;
   gap: 1rem;
   border: 1px solid #ddd;

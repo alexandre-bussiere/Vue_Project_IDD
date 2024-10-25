@@ -1,15 +1,11 @@
 <template>
   <header class="base-header">
     <nav>
-      <ul>
-        <li>
-          <router-link v-if="user" to="/conversations">Latest Conversations</router-link>
-          <router-link v-else to="/">Home</router-link>
-        </li>
-        <li><router-link v-if="user && conversationTextId" :to="{ name: 'ConversationShow', params: { id: conversationTextId } }">
-            Conversations
-          </router-link>
-        </li>
+       <ul>
+        <li>Home</li>
+        <li>Get Email</li>
+        <li>Send Email</li>
+        <li>Delete Email</li>
       </ul>
     </nav>
   </header>  
@@ -35,10 +31,7 @@ export default {
 <style scoped>
 .base-header {
   background-color: #f8f9fa;
-  padding: 1rem;
   border-bottom: 1px solid #ddd;
-
-  margin-bottom: 5rem;
 }
 
 nav ul {
