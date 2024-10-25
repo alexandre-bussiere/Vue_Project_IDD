@@ -1,7 +1,14 @@
 <template>
   <div class="Home">
-    <SigninButtonMicrosoft />
-    <SigninButtonGoogle />
+    <div v-if="user">
+      <h1>Home Page</h1>
+      <p>Welcome, {{ user.name }}!</p>
+    </div>
+    <div v-else>
+      <h1>Home Page</h1>
+      <p>Please sign in to continue.</p>
+    </div>
+    <SigninForm />
     <br />
     <p v-if="user">Bienvenue, {{ user.name }}!</p>
     <p v-else>Veuillez vous connecter pour continuer.</p>
@@ -16,15 +23,13 @@
 </template>
 
 <script>
-import SigninButtonMicrosoft from '../components/SigninButton_Microsoft.vue';
-import SigninButtonGoogle from '../components/SigninButton_Google.vue';
+import SigninForm from '../components/SigninForm.vue';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'HomePage',
   components: {
-    SigninButtonMicrosoft,
-    SigninButtonGoogle
+    SigninForm
   },
   data() {
     return {
@@ -46,8 +51,7 @@ export default {
             alert("Please enter a conversation text.");
         }
     }
-}
-
+  }
 };
 </script>
 

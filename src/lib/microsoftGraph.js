@@ -35,6 +35,7 @@ export function signInAndGetUser() {
         scopes: ["User.Read"]
     })
         .then(loginResponse => {
+            console.log("Login popup opened");
             msalInstance.setActiveAccount(loginResponse.account);
             return loginResponse.account;
         })
