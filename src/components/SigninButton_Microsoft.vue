@@ -1,33 +1,29 @@
 <template>
-  <div>
-    <button :disabled="isDisabled" @click="handleSignIn">Sign In</button>
+    <button class ="siginDiv" :disabled="isDisabled" @click="handleSignIn">Sign In</button>
     <div v-if="user">
       <p>Logged in as: {{ user.name }}</p>
       <p>Email: {{ user.username }}</p>
     </div>
-  </div>
 </template>
 
 <script>
 import { initialize, signInAndGetUser } from '../lib/microsoftGraph.js';
 import { mapMutations } from 'vuex';
 
-export default {
-  data() {
+export default 
+{
+  data() 
+  {
     return {
       user: null,
       isDisabled: false,
     };
   },
-  mounted() {
-    initialize()
-      .then(() => {
-        console.log("MSAL Initialized and ready for use");
-      })
-      .catch(error => {
-        console.error("Failed to initialize MSAL:", error);
-      });
+  mounted() 
+  {
+    initialize();
   },
+
   methods: {
     ...mapMutations(['setUser']),
     handleSignIn() {
@@ -52,6 +48,12 @@ export default {
 </script>
 
 <style scoped>
+.siginDiv
+{
+  display: flex;
+  justify-content: center;
+
+}
 button {
   background-color: #28a745;
   border: none;

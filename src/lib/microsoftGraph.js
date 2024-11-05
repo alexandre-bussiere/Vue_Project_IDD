@@ -1,14 +1,11 @@
 import { PublicClientApplication } from "@azure/msal-browser";
+import axios from "axios";
 
 let msalInstance = null;
 
 // Initialisation of MSAL
 export async function initialize() 
 {
-    console.log('Tenant ID:', process.env.VUE_APP_TENANT_ID);
-    console.log('Client ID:', process.env.VUE_APP_OAUTH_CLIENT_ID);
-    console.log('Redirect URI:', process.env.VUE_APP_REDIRECT_URI);
-
     if (!msalInstance) 
     {
         msalInstance = new PublicClientApplication({
@@ -28,180 +25,209 @@ export async function initialize()
 }
 
 // Function for async/await
-export function signInAndGetUser() 
+export async function signInAndGetUser() 
 {
     if (!msalInstance) 
     {
-        return Promise.reject("MSAL instance has not been initialized. Call initialize() before using MSAL functions.");
+        throw new Error("MSAL instance non initialisée. Appelez initialize() avant d'utiliser MSAL.");
     }
 
-    return msalInstance.loginPopup({
-        scopes: ["User.Read", "Mail.Read", "Mail.ReadWrite", "Mail.Send"]
-    })
-        .then(loginResponse => {
-            msalInstance.setActiveAccount(loginResponse.account);
-            return loginResponse.account;
-        })
-        .catch(error => {
-            console.log("Login failed:", error);
-            throw error;
+    try 
+    {
+        const loginResponse = await msalInstance.loginPopup({
+            scopes: ["User.Read", "Mail.Read", "Mail.ReadWrite", "Mail.Send"]
         });
+
+        if (loginResponse && loginResponse.account) {
+            msalInstance.setActiveAccount(loginResponse.account);
+            console.log("Active account set: ", loginResponse.account);
+        } else {
+            console.error("No account returned during login");
+        }
+
+        console.log("account: ", loginResponse.account)
+        return loginResponse.account;
+    } 
+
+    catch (error) 
+    {
+        console.error("Login failed:", error);
+        throw error;
+    }
 }
 
 // Function for token, this token is required to do action on an account
-export function getAccessToken() 
+export async function acquireToken() 
 {
-    const account = msalInstance.getActiveAccount();
-    try
-    {
-        if (!account) 
-        {
-            return Promise.reject("No active account! Please log in.");
-        }
+    const activeAccount = msalInstance.getActiveAccount();
 
-        return msalInstance.acquireTokenSilent({
-            scopes: ["Mail.Read", "Mail.ReadWrite", "Mail.Send"],
-            account: account
-        })
+    if (!activeAccount) {
+        console.error("No active account found. Please sign in.");
+        return null;
     }
-    catch(error)
+
+    const request = 
     {
-        // Open a popup window and allow the user to reconnect, generating a new access token.
-        console.Error(error)
-        return msalInstance.acquireTokenPopup({
-            scopes: ["Mail.Read", "Mail.ReadWrite", "Mail.Send"],
-            account: account
-        });
+      scopes: ["Mail.Read", "Mail.Send", "openid", "profile", "User.Read"],
+      account: activeAccount
+    };
+  
+    try 
+    {
+      const response = await msalInstance.acquireTokenSilent(request);
+      return response.accessToken;
+    } 
+    
+    catch (error) 
+    {
+      console.error("Token acquisition failed", error);
+      return null;
     }
 }
+
+
+// Fonction pour récupérer les informations du profil utilisateur
+export async function getUserProfile() 
+{
+    const accessToken = await acquireToken();
+    if (!accessToken) 
+    {
+        throw new Error("Access token not acquired.");
+    }
+
+    try 
+    {
+        const response = await axios.get("https://graph.microsoft.com/v1.0/me", 
+        {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        const profile = response.data;
+        console.log("User profile:", profile);
+
+        // Vérifie le champ userPrincipalName pour obtenir l'adresse e-mail principale
+        console.log("Primary email address:", profile.userPrincipalName);
+        // return response.data;
+    } 
+    catch (error) 
+    {
+        console.error("Error fetching user profile:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+}
+
 
 // Read mails
-export function readEmails()
+export async function readEmails() 
 {
-    console.log("I'm in readEmail");
-    return getAccessToken().then(token => {
-        console.log("Access Token: ", token); 
-        return fetch('https://graph.microsoft.com/v1.0/me/messages', 
-        {
-            method: 'GET',
-            headers: 
-            {
-                // A Bearer Token is an access token which proves that the user is authorized to access a protected resource.
-                Authorization: `Bearer ${token.accessToken}`,
-                'Content-Type': 'application/json'
-            }
-        },
-        console.log("I'm in readEmail and fetch "))
+  const accessToken = await acquireToken();
+  if (!accessToken) 
+  {
+    throw new Error("Access token not acquired.");
+  }
 
-        .then(response => 
-        {
-            // Verify the statut of the response (statut HTTP 200 or not )
-            if (!response.ok)
-            {
-                throw new Error(`Error fetching emails: ${response.status} ${response.statusText}`);
-            }
-            return response.json(); 
-        },
-        console.log("I'm in readEmail and then ")
-        )
-
-        .then(data => {
-                console.log("Emails: ", data);
-                return data;
-            },
-            console.log("I'm in readEmail and data ")
-        )
-        .catch(error => {
-                console.error("Error fetching emails: ", error);
-            });
+  try 
+  {
+    const response = await axios.get("https://graph.microsoft.com/v1.0/me/messages", 
+    {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      params: {
+        "$orderby": "receivedDateTime desc", // Trie les emails par date de réception (les plus récents en premier)
+        "$top": 15 // Limite à 10 emails
+      }
     });
+    console.log("informations : ", response.data); // Liste des emails
+    return response.data;
+  } 
+  catch (error) 
+  {
+    console.error("Error reading emails:", error.response ? error.response.data : error.message);
+    throw error;
+  }
 }
+
 
 // Send mail
-export function sendEmail(emailData) 
+export async function sendEmail(emailData) 
 {
-    return getAccessToken().then(token => {
-        const emailBody = 
+    const accessToken = await acquireToken();
+    if (!accessToken) 
+    {
+        throw new Error("Access token not acquired.");
+    }
+
+    const body = 
+    {
+        message: 
         {
-            message: 
+            subject: emailData.subject,
+            body: 
             {
-                subject: emailData.subject,
-
-                body: 
-                {
-                    contentType: "Text",
-                    content: emailData.content
-                },
-
-                toRecipients: 
-                [
-                    {
-                        emailAddress: 
-                        {
-                            address: emailData.recipient
-                        }
-                    }
-                ]
+                contentType: "Text",
+                content: emailData.content
             },
+            toRecipients: 
+            [
+                {
+                    emailAddress: 
+                    {
+                        address: emailData.recipientAddress,  // Adresse e-mail du destinataire
+                    }
+                }
+            ],
+        },
+        saveToSentItems: "true"
+    };
 
-            saveToSentItems: "true"
-        };
-
-        return fetch('https://graph.microsoft.com/v1.0/me/sendMail', 
+    try 
+    {
+        const response = await axios.post("https://graph.microsoft.com/v1.0/me/sendMail", JSON.stringify(body), 
         {
-            method: 'POST',
             headers: 
             {
-                Authorization: `Bearer ${token.accessToken}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(emailBody)
-        })
-            .then(response => {
-                if (response.ok) 
-                {
-                    console.log("Email sent successfully");
-                } 
-                else 
-                {
-                    console.error("Failed to send email", response);
-                }
-            })
-            .catch(error => 
-            {
-                console.error("Error sending email: ", error);
-            });
-    });
-}
-
-// Delete mail
-export function deleteEmail(messageId) 
-{
-    return getAccessToken().then(token => 
-    {
-        return fetch(`https://graph.microsoft.com/v1.0/me/messages/${messageId}`, 
-        {
-            method: 'DELETE',
-            headers: {
-                Authorization: `Bearer ${token.accessToken}`,
-                'Content-Type': 'application/json'
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json"
             }
-        })
-            .then(response => 
-            {
-                if (response.ok) 
-                {
-                    console.log(`Email with ID ${messageId} deleted successfully`);
-                } 
-                else 
-                {
-                    console.error("Failed to delete email", response);
-                }
-            })
-            .catch(error => 
-            {
-                console.error("Error deleting email: ", error);
-            });
-    });
-}
+        });
 
+        if (response.status === 202) 
+        {
+            console.log("hey !", emailData);
+            console.log("Email sent successfully!");
+            console.log("response: ",response)
+        } 
+    } 
+    
+    catch (error) 
+    {
+        console.error("Error sending email:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+}  
+
+// Delete email using Axios
+export async function deleteEmail(emailId) 
+{
+    const accessToken = await acquireToken();
+    if (!accessToken) 
+    {
+        throw new Error("Access token not acquired.");
+    }
+
+    try 
+    {
+        const response = await axios.delete(`https://graph.microsoft.com/v1.0/me/messages/${emailId}`, 
+        {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+
+        if (response.status === 204) 
+        {
+            console.log("Email deleted successfully!");
+        }
+    } 
+    catch (error) 
+    {
+        console.error("Error deleting email:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+}

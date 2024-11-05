@@ -22,46 +22,50 @@ export default {
 
 <style scoped>
 .base-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
   background-color: #343a40;
   color: #fff;
-  padding: 1rem;
+  padding: 20px 0;
   text-align: center;
+  width: 100%;
   border-top: 1px solid #ddd;
 }
 
 .footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.footer-content p {
-  margin: 0;
-  font-size: 14px; /* Taille des caractères du texte de copyright */
-}
-
-nav ul {
-  list-style: none;
+.footer-content nav {
   display: flex;
-  justify-content: center;
+}
+
+.footer-content nav ul {
+  display: flex;
+  list-style: none;
   padding: 0;
-  margin: 0.5rem 0 0 0;
+  margin: 0;
 }
 
-nav ul li {
-  margin: 0 1rem;
+.footer-content nav ul li {
+  margin: 0 15px;
 }
 
-nav ul li a {
+.footer-content nav ul li a {
   color: #fff;
   text-decoration: none;
-  font-size: 16px; /* Taille des caractères des liens */
+  font-size: 14px;
 }
 
-nav ul li a:hover {
+.footer-content nav ul li a:hover {
   text-decoration: underline;
 }
+
+.footer-content p {
+  margin: 0;
+  font-size: 14px;
+}
+
 </style>

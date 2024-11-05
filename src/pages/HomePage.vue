@@ -1,18 +1,20 @@
 <template>
+    <div v-if="user">
+      <router-link to = "send">Send Email</router-link>
+      <router-link to = "management">Email Management</router-link>
+    </div>
   <div class="Home">
-    <SigninButton />
+    <div  class ="siginInHome"> 
+      <SigninButton />
+    </div>
     <p v-if="user">Bienvenue, {{ user.name + ", "+ user.username }}!</p>
     <p v-else>Veuillez vous connecter pour continuer.</p>
-    <div>
-      <emailManagementComponent/>
-    </div>
   </div>
 </template>
 
 <script>
 import {initialize} from '../lib/microsoftGraph.js';
 import SigninButton from '../components/SigninButton_Microsoft.vue';
-import emailManagementComponent from '../components/emailManagementComponent.vue'
 import { mapGetters } from 'vuex';
 
 export default 
@@ -20,8 +22,7 @@ export default
   name: 'HomePage',
   components: 
   {
-    SigninButton,
-    emailManagementComponent
+    SigninButton
   },
   data() 
   {
@@ -35,8 +36,16 @@ export default
     }
   },
 
-  mounted() {
-    initialize(); // Initialiser MSAL
+  async mounted() 
+  {
+    try
+    {
+      await initialize(); // Initialiser MSAL
+    }
+    catch (error) 
+    {
+      console.error("Error during MSAL initialization: ", error);
+    }
   },
 };
 </script>
@@ -44,13 +53,11 @@ export default
 <style scoped>
 
 .Home {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;    
+  align-content: center;  
   height: 50vh;  
   font-family: Avenir, Helvetica, Arial, sans-serif;
   font-family: 'Roboto', sans-serif;
+  min-height: 50vh
 }
 
 .form-container {
@@ -72,5 +79,11 @@ input {
 h2 {
   text-align: center;
   margin-bottom: 20px;
+}
+.siginInHome
+{
+  display: flex;
+  justify-content: space-around;
+  
 }
 </style>

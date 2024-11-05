@@ -1,20 +1,31 @@
 <template>
     <button @click="getEmails" v-if="user">Get Emails</button>
-    <button @click="sendTestEmail" v-if="user">Send Test Email</button>
-    <button @click="deleteFirstEmail" v-if="user">Delete First Email</button>
 
     <div v-if="emails">
-      <h3>Emails:</h3>
-      <ul>
-        <li v-for="email in emails.value" :key="email.id">
-          {{ email.subject }} from {{ email.sender.emailAddress.address }}
-        </li>
-      </ul>
+            <label for="emailIndex">Index of the email you want to delete:</label>
+            <input type="number" id="emailIndex" v-model="emailIndex" placeholder="Enter email number to delete" min="1" />
     </div>
+    <button @click="deleteEmailByIndex" v-if="user">Delete Email</button>
+
+    <!-- Display emails of the users-->
+    <div v-if="emails">
+      <h3>Emails:</h3>
+        <ul v-for="(email, index) in emails.value" :key="index">
+          <strong>Index:</strong> {{ index + 1 }}
+          <strong>Subject:</strong> {{ email.subject || 'No subject' + "\n"}}
+          <strong>To:</strong>
+            <li v-for="recipient in email.toRecipients" :key="recipient.emailAddress.address">
+              {{ recipient.emailAddress.address }}
+            </li>
+          <span v-if="email.sender && email.sender.emailAddress">
+            <strong>From: </strong>{{ email.sender.emailAddress.name }}</span>
+        </ul>
+    </div>
+    
 </template>
 
 <script>
-import { initialize, readEmails,sendEmail,deleteEmail} from '../lib/microsoftGraph.js';
+import { initialize, signInAndGetUser, getUserProfile, readEmails, deleteEmail, acquireToken } from '../lib/microsoftGraph.js';
 import { mapGetters } from 'vuex';
 export default 
 {
@@ -23,7 +34,11 @@ export default
   data() 
   {
     return {
+      emailIndex: 1, // To select the email to delete
       emails: null,
+      emailSubject: '', // To stock the subject of the mail
+      emailContent: '', // To stock the content of the mail
+      userProfile: null  
     };
   },
   computed: 
@@ -35,74 +50,82 @@ export default
     }
   },
 
-  mounted() {
-    initialize(); // Initialiser MSAL
+  async mounted() 
+  {
+    try 
+    {
+      const login = await initialize(); // Initialiser MSALs
+      console.log("login: ", login)
+      if(login)
+      {
+        await signInAndGetUser(); // Authentifier l'utilisateur
+      // Récupérer le profil utilisateur
+      const profile = await getUserProfile();
+      this.userProfile = profile;
+
+      console.log("User profile:", this.userProfile);
+      }
+    }   
+    catch (error) 
+    {
+      console.error("Error during user sign-in or profile fetch:", error);
+    }
   },
 
   methods: 
   {
-    getEmails() 
+    async getEmails() 
     {
-      readEmails()
-        .then(data => {
-          this.emails = data;
-          console.log(data);
-        })
-        .catch(error => 
-        {
-          console.error("Error getting emails:", error);
-        });
-    },
-    sendTestEmail() 
-    {
-      const emailData = 
+      try 
       {
-        subject: "Test Email",
-        content: "This is a test email from Vue.js",
-        recipient: "recipient@example.com"
-      };
-      sendEmail(emailData)
-        .then(() => 
-        {
-          console.log("Email sent!");
-        })
-        .catch(error => 
-        {
-          console.error("Error sending email:", error);
-        });
-    },
-    deleteFirstEmail() 
-    {
-      if (this.emails && this.emails.value.length > 0) 
+        await acquireToken(); // check the accessToken to have the permission
+        const data = await readEmails();
+        console.log("Données d'emails reçues : ", data);
+
+        // Filtrer les emails qui ont un sender défini
+        const filteredEmails = data.value.filter(email => email.sender && email.sender.emailAddress);
+
+        this.emails = { value: filteredEmails }; // Remplace la liste des emails par les emails filtrés
+      } 
+      catch (error) 
       {
-        const firstEmailId = this.emails.value[0].id;
-        deleteEmail(firstEmailId)
-          .then(() => {
-            console.log("First email deleted!");
-            this.getEmails(); // Rafraîchir la liste des emails après suppression
-          })
-          .catch(error => {
-            console.error("Error deleting email:", error);
-          });
+        console.error("Error getting emails:", error);
+      }
+    },
+    
+    async deleteEmailByIndex() 
+    {
+      // const to set the first element at 0 and not 1 because we use 1 as first element for the user
+      const adjustedIndex = this.emailIndex - 1;
+
+      if (this.emails && this.emails.value.length > adjustedIndex && adjustedIndex >= 0) 
+      {
+        const emailId = this.emails.value[adjustedIndex].id; // Récupère l'ID de l'email à supprimer
+
+        try 
+        {
+          await acquireToken();
+          await deleteEmail(emailId);
+          console.log("Email deleted!");
+          this.getEmails(); // Call the function to see the result of the delete
+        } 
+        catch (error) 
+        {
+          console.error("Error deleting email:", error);
+        }
+      } 
+      
+      else 
+      {
+        alert("Invalid email index. Please enter a valid index.");
       }
     }
   }
 };
+
 </script>
 
 <style scoped>
-/* button {
-  padding: 10px;
-  margin: 12px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #45a049;
-} */
 
 button {
   background-color: #28a745;
