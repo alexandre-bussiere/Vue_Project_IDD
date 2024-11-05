@@ -1,5 +1,5 @@
 <template>
-    <button class ="siginDiv" :disabled="isDisabled" @click="handleSignIn">Sign In</button>
+    <button v-if="isButtonVisible" class ="siginDiv" :disabled="isDisabled" @click="handleSignIn">Sign In</button>
     <div v-if="user">
       <p>Logged in as: {{ user.name }}</p>
       <p>Email: {{ user.username }}</p>
@@ -17,6 +17,7 @@ export default
     return {
       user: null,
       isDisabled: false,
+      isButtonVisible: true
     };
   },
   mounted() 
@@ -24,14 +25,18 @@ export default
     initialize();
   },
 
-  methods: {
+  methods: 
+  {
     ...mapMutations(['setUser']),
-    handleSignIn() {
+    handleSignIn() 
+    {
       initialize()
-        .then(() => {
+        .then(() => 
+        {
           return signInAndGetUser();
         })
-        .then(user => {
+        .then(user => 
+        {
           this.setUser({
             name: user.name,
             username: user.username
@@ -41,9 +46,10 @@ export default
         .catch(error => {
           console.error("Error during sign-in:", error);
         });
-    
+      this.isButtonVisible = false;
     },
   },
+  
 };
 </script>
 
@@ -57,11 +63,10 @@ export default
 button {
   background-color: #28a745;
   border: none;
-  color: white; 
-  padding: 12px 24px; 
+  color: white;
+  padding: 12px 24px;
   text-align: center;
-  display: inline-block;
-  font-size: 16px;
+  font-size: 20px;
   border-radius: 5px;
   margin: 12px;
 }

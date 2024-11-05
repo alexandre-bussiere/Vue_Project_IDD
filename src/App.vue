@@ -21,7 +21,7 @@ export default
 #app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* S'assure que l'app prend toute la hauteur de la fenêtre */
+  min-height: 90vh; /* S'assure que l'app prend toute la hauteur de la fenêtre */
   font-family: Avenir, Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
