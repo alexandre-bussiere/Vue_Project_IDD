@@ -9,7 +9,7 @@ export async function initializeGoogleAuth() {
                 try {
                     const auth2 = await gapi.auth2.init({
                         client_id: GOOGLE_CLIENT_ID,
-                        scope: 'https://www.googleapis.com/auth/gmail.readonly'
+                        scope: 'https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send'
                     });
                     await gapi.client.load('gmail', 'v1');
                     resolve(auth2);

@@ -62,10 +62,13 @@ export default {
 
   },
   
-  mounted() {
+  async mounted() {
     console.log('Component mounted')
     console.log('User :',this.user)
     console.log("AccesToken",this.accessToken)
+    if(this.user){
+      await this.fetchGoogleEmails();
+    }
   },
   computed: {
     ...mapGetters(['getUser','getAccessToken']), 

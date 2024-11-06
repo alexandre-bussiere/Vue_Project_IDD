@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '@/pages/HomePage.vue';
 import GetGoogleMailPage from '@/pages/GetGoogleMailPage.vue';
+import SendGoogleMailPage from '@/pages/SendGoogleMailPage.vue';
 
 const routes = [
     {
@@ -10,8 +11,13 @@ const routes = [
     },
     {
         path: '/get-email',
-        name: 'GoogleMail',
+        name: 'GetGoogleMail',
         component: GetGoogleMailPage
+    },
+    {
+        path: '/send-email',
+        name: 'SendGoogleMail',
+        component: SendGoogleMailPage
     }
 ];
 
