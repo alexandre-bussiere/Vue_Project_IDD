@@ -1,12 +1,18 @@
 <template>
-  <div class="emailManagementContainer">
+    <div class="emailManagementContainer">
+      <div class="controlsSection">
+        <label>Folder of emails:</label>
+        <select v-model="selectedFolder" @change="getEmails">
+          <option value="inbox">Inbox</option>
+          <option value="sentitems">Sent Items</option>
+        </select>
+        <button  class = "modifiedButton" @click="getEmails" v-if="user">Get Emails</button>
+      </div>
 
+    <!-- Display emails of the users-->
     <div class="getEmailsSection">
-      <button @click="getEmails" v-if="user">Get Emails</button>
-
-      <!-- Display emails of the users-->
       <div class="emailList" v-if="emails">
-        <h3>Emails:</h3>
+        <h3>{{ selectedFolder === 'inbox' ? 'Inbox' : 'Sent Items' }} Emails:</h3>
           <ul v-for="(email, index) in emails.value" :key="index">
             <strong>Index:</strong> {{ index + 1 +"\n"}} 
             <br>
@@ -20,19 +26,17 @@
       </div>
     </div>
 
-    <div class="deleteEmailsSection">
-      <div v-if="emails">
+    <div class="deleteEmailsSection" v-if="emails">
         <label for="emailIndex">Index of the email you want to delete:</label>
         <input type="number" id="emailIndex" v-model="emailIndex" placeholder="Enter email number to delete" min="1" />
-      </div>
-      <button @click="deleteEmailByIndex" v-if="user">Delete Email</button>
+      <button class = "button" @click="deleteEmailByIndex" v-if="user">Delete Email</button>
     </div>
   </div>
     
 </template>
 
 <script>
-import { initialize, signInAndGetUser, getUserProfile, readEmails, deleteEmail, acquireToken } from '../lib/microsoftGraph.js';
+import { readEmails, deleteEmail, acquireToken } from '../lib/microsoftGraph.js';
 import { mapGetters } from 'vuex';
 export default 
 {
@@ -41,11 +45,10 @@ export default
   data() 
   {
     return {
+      selectedFolder: 'inbox',
       emailIndex: 1, // To select the email to delete
-      emails: null,
-      emailSubject: '', // To stock the subject of the mail
-      emailContent: '', // To stock the content of the mail
-      userProfile: null  
+      emails: null
+  
     };
   },
   computed: 
@@ -57,28 +60,6 @@ export default
     }
   },
 
-  async mounted() 
-  {
-    try 
-    {
-      const login = await initialize(); // Initialiser MSALs
-      console.log("login: ", login)
-      if(login)
-      {
-        await signInAndGetUser(); // Authentifier l'utilisateur
-      // Récupérer le profil utilisateur
-      const profile = await getUserProfile();
-      this.userProfile = profile;
-
-      console.log("User profile:", this.userProfile);
-      }
-    }   
-    catch (error) 
-    {
-      console.error("Error during user sign-in or profile fetch:", error);
-    }
-  },
-
   methods: 
   {
     async getEmails() 
@@ -86,8 +67,7 @@ export default
       try 
       {
         await acquireToken(); // check the accessToken to have the permission
-        const data = await readEmails();
-        console.log("Données d'emails reçues : ", data);
+        const data = await readEmails(this.selectedFolder);
 
         // Filtrer les emails qui ont un sender défini
         const filteredEmails = data.value.filter(email => email.sender && email.sender.emailAddress);
@@ -113,7 +93,6 @@ export default
         {
           await acquireToken();
           await deleteEmail(emailId);
-          console.log("Email deleted!");
           this.getEmails(); // Call the function to see the result of the delete
         } 
         catch (error) 
@@ -138,18 +117,49 @@ export default
   display: flex;
   justify-content: space-between;
   padding: 20px;
-  max-width: 800px;
+  max-width: 1400px;
   margin: 0 auto;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.getEmailsSection,
+.controlsSection 
+{
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  margin-right: 10px;
+  width:180px;
+}
+
+.controlsSection label 
+{
+  font-weight: bold;
+  text-align: center;
+}
+
+.controlsSection select 
+{
+  padding: 8px 12px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.getEmailsSection
+{
+  width: 48%;
+  margin-top: 20px;
+}
 .deleteEmailsSection 
 {
-  width: 48%; /* Prend environ la moitié de l'espace pour chaque section */
+  width: 48%;
   margin-top: 20px;
+  text-align: center; 
 }
 
 .getEmailsSection h3,
@@ -159,9 +169,16 @@ export default
   color: #333;
 }
 
+.deleteEmailsSection label,
+.deleteEmailsSection input,
+.deleteEmailsSection .button 
+{
+  display: block;
+  margin: 10px auto; /* Centre les éléments individuellement */
+}
+
 input[type="number"] 
 {
-  width: 100%;
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
@@ -172,7 +189,7 @@ input[type="number"]
 
 .emailList 
 {
-  margin-top: 20px;
+  margin: 20px;
 }
 
 .emailList ul 
@@ -195,8 +212,18 @@ input[type="number"]
   color: #333;
 }
 
+.modifiedButton
+{
+  background-color: #28a745;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  font-size: 20px;
+  border-radius: 5px;
+  margin:0%;
+}
 
-button 
+.button 
 {
   background-color: #28a745;
   border: none;

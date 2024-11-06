@@ -1,21 +1,18 @@
 <template>
+  <div v-if="!isAuthenticated">
     <button v-if="isButtonVisible" class ="siginDiv" :disabled="isDisabled" @click="handleSignIn">Sign In</button>
-    <div v-if="user">
-      <p>Logged in as: {{ user.name }}</p>
-      <p>Email: {{ user.username }}</p>
-    </div>
+  </div>
 </template>
 
 <script>
 import { initialize, signInAndGetUser } from '../lib/microsoftGraph.js';
-import { mapMutations } from 'vuex';
+import { mapMutations, mapGetters } from 'vuex';
 
 export default 
 {
   data() 
   {
     return {
-      user: null,
       isDisabled: false,
       isButtonVisible: true
     };
@@ -25,32 +22,38 @@ export default
     initialize();
   },
 
+  computed: 
+  {
+    ...mapGetters(['getUser', 'isAuthenticated']),
+    user() 
+    {
+      return this.getUser;
+    },
+  },
+
   methods: 
   {
     ...mapMutations(['setUser']),
-    handleSignIn() 
+    async handleSignIn() 
     {
-      initialize()
-        .then(() => 
-        {
-          return signInAndGetUser();
-        })
-        .then(user => 
-        {
-          this.setUser({
-            name: user.name,
-            username: user.username
-          });
-          this.isDisabled = true;
-        })
-        .catch(error => {
-          console.error("Error during sign-in:", error);
+      try 
+      {
+        await initialize();
+        const user = await signInAndGetUser();
+        this.setUser({
+          name: user.name,
+          username: user.username,
         });
-      this.isButtonVisible = false;
+        this.isDisabled = true;
+      } 
+      catch (error) 
+      {
+        console.error("Error during sign-in:", error);
+      }
     },
   },
-  
 };
+
 </script>
 
 <style scoped>

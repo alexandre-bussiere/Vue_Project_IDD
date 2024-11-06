@@ -32,10 +32,7 @@ const router = createRouter({
 });
 
 // Guard, if the user is not loggin, he can't go to conversation page
-router.beforeEach((to, from, next) => {
-    console.log("Navigating to:", to.path);
-    console.log("User state:", store.state.user);
-  
+router.beforeEach((to, from, next) => {  
   
     // Verify if the route require a guard
     if (to.matched.some(record => record.meta.requiresAuth)) 
@@ -44,14 +41,12 @@ router.beforeEach((to, from, next) => {
         if (!store.state.user) 
         {
           // Go to HomePage
-          console.log("Not authenticated, redirecting to home page.");
           alert("You are not login, retry after being login")
           next({ path: '/' });
         } 
         else 
         {
           // else access to conversation page
-          console.log("Authenticated, allowing access.");
           next();
         }
     } 

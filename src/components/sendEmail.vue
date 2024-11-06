@@ -15,7 +15,7 @@
             <label for = "recipient">recipient:</label>
             <textarea id="recipient" v-model="emailRecipient" placeholder="Enter email recipient here"></textarea>
         </div>
-        <button type ="submit" @click="sendCustomEmail" v-if="user">Send Email</button>
+        <button type ="submit" :disabled="isSending" v-if="user">Send Email</button>
       </form>
 
     </div>
@@ -35,7 +35,8 @@ export default
       emailSubject: '', // Pour stocker le sujet de l'email
       emailContent: '', // Pour stocker le contenu de l'email
       emailRecipient: '',
-      userProfile: null  
+      userProfile: null,
+      isSending: false
     };
   },
   computed: 
@@ -52,7 +53,6 @@ export default
     try 
     {
       const login = await initialize(); // Initialiser MSALs
-      console.log("login: ", login)
       if(login)
       {
         await signInAndGetUser(); // Authentifier l'utilisateur
@@ -60,7 +60,6 @@ export default
       const profile = await getUserProfile();
       this.userProfile = profile;
 
-      console.log("User profile:", this.userProfile);
       }
     }   
     catch (error) 
@@ -73,8 +72,10 @@ export default
   {
     async sendCustomEmail() 
     {
-      if (this.emailSubject && this.emailContent)
+      if (this.emailSubject && this.emailContent && this.emailRecipient)
       {
+        this.isSending = true;
+
         const emailData = 
         {
           subject: this.emailSubject,  // Utilise les données du formulaire
@@ -84,7 +85,11 @@ export default
         try 
         {
           await sendEmail(emailData);  // Appelle la fonction pour envoyer l'email
-          console.log("Email sent!");
+          this.isSending = false;
+
+          this.emailSubject = '';
+          this.emailContent = '';
+          this.emailRecipient = '';
         } 
 
         catch (error) 
@@ -94,7 +99,7 @@ export default
       } 
       else 
       {
-        alert("Please fill in both subject and content fields.");
+        alert("Please fill all the fields.");
       }
     },
   }

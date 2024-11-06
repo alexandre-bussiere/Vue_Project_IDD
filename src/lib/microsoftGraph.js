@@ -19,7 +19,6 @@ export async function initialize()
                 cacheLocation: "sessionStorage"
             }
         });
-        console.log("MSAL Initialized");
         await msalInstance.initialize();
     }
 }
@@ -38,14 +37,15 @@ export async function signInAndGetUser()
             scopes: ["User.Read", "Mail.Read", "Mail.ReadWrite", "Mail.Send"]
         });
 
-        if (loginResponse && loginResponse.account) {
+        if (loginResponse && loginResponse.account) 
+            {
             msalInstance.setActiveAccount(loginResponse.account);
-            console.log("Active account set: ", loginResponse.account);
-        } else {
+        } 
+        else 
+        {
             console.error("No account returned during login");
         }
 
-        console.log("account: ", loginResponse.account)
         return loginResponse.account;
     } 
 
@@ -102,11 +102,10 @@ export async function getUserProfile()
             headers: { Authorization: `Bearer ${accessToken}` }
         });
         const profile = response.data;
-        console.log("User profile:", profile);
 
         // Vérifie le champ userPrincipalName pour obtenir l'adresse e-mail principale
         console.log("Primary email address:", profile.userPrincipalName);
-        // return response.data;
+
     } 
     catch (error) 
     {
@@ -117,7 +116,7 @@ export async function getUserProfile()
 
 
 // Read mails
-export async function readEmails() 
+export async function readEmails(folder = "inbox") 
 {
   const accessToken = await acquireToken();
   if (!accessToken) 
@@ -127,15 +126,15 @@ export async function readEmails()
 
   try 
   {
-    const response = await axios.get("https://graph.microsoft.com/v1.0/me/messages", 
+    const response = await axios.get(`https://graph.microsoft.com/v1.0/me/mailFolders/${folder}/messages`,  //To access to emails in the inbox or sent folder
     {
       headers: { Authorization: `Bearer ${accessToken}` },
       params: {
-        "$orderby": "receivedDateTime desc", // Trie les emails par date de réception (les plus récents en premier)
-        "$top": 15 // Limite à 10 emails
+        "$orderby": "receivedDateTime desc", // Trie les emails par date de réception
+        "$top": 15 // Limite à 15 emails
       }
     });
-    console.log("informations : ", response.data); // Liste des emails
+    console.log("Emails from folder:", folder, response.data);
     return response.data;
   } 
   catch (error) 
@@ -191,9 +190,7 @@ export async function sendEmail(emailData)
 
         if (response.status === 202) 
         {
-            console.log("hey !", emailData);
             console.log("Email sent successfully!");
-            console.log("response: ",response)
         } 
     } 
     
