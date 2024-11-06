@@ -1,6 +1,6 @@
 <template>
     <div class="login-container">
-        <form class="login-form">
+        <div class="login-form">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" placeholder="Enter your email">
             
@@ -9,10 +9,7 @@
             
             <input type="submit" value="Login">
             <br />
-            <div class="Extra-login">
-              <slot></slot>
-            </div>
-        </form>
+        </div>
     </div>
 </template>
 
@@ -22,7 +19,6 @@ export default {
     name: 'SigninForm',
     components: {
     },
-    
 
 }
 </script>

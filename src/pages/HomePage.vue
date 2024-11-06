@@ -3,16 +3,19 @@
     <h1>Home Page</h1>
     
     <div v-if="user">
-      <p>Welcome, {{ user.name }}!</p>
+      <p>Welcome, {{ user.name }} !</p>
     </div>
     <div v-else>
       <p>Please sign in to continue.</p>
     </div>
     <div class="login-container">
-      <SigninForm>
-        <SigninButtonMicrosoft />
-        <SigninButtonGoogle />
-      </SigninForm>
+      <form class="login-form">
+        <SigninForm></SigninForm>
+      </form>
+        <div class="Extra-login">
+          <SigninButtonMicrosoft />
+          <SigninButtonGoogle />
+        </div>
     </div>
   </div>
 </template>
@@ -46,4 +49,25 @@ export default {
   margin-top: 60px;
 }
 
+.Extra-login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-width: 300px;
+  margin: auto;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem;
+  background-color: #f4f4f4;
+}
 </style>

@@ -1,11 +1,11 @@
 <template>
   <header class="base-header">
     <nav>
-       <ul>
-        <li>Home</li>
-        <li>Get Email</li>
-        <li>Send Email</li>
-        <li>Delete Email</li>
+      <ul>
+        <li><router-link to="/">Home</router-link></li>
+        <li><router-link to="/get-email">Get Email</router-link></li>
+        <li><router-link to="/send-email">Send Email</router-link></li>
+        <li><router-link to="/delete-email">Delete Email</router-link></li>
       </ul>
     </nav>
   </header>  
@@ -40,14 +40,16 @@ nav ul {
   justify-content: space-around;
 }
 
+nav ul li {
+  font-weight: bold;
+}
+
 nav ul li a {
   text-decoration: none;
   color: #333;
-  font-weight: bold;
 }
 
 nav ul li a:hover {
   color: #00438a;
 }
-
 </style>

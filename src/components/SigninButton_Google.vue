@@ -1,29 +1,39 @@
 <template>
-   <GoogleLogin :callback="callbackck" prompt auto-login auto-logout="true"/>
+  <div>
+    <button @click="signInAndGetGoogleUserCall" class="btn btn-primary">Sign in with Google</button>  
+  </div>
 </template>
 
+
 <script>
-import { decodeCredential } from 'vue3-google-login';
+import { mapMutations } from 'vuex';
+import { signInAndGetGoogleUser } from '../lib/googleGraph.js';
 
 export default {
   name: 'SigninButtonGoogle',
   data() {
     return {
-      loggedIn: false,
       user: null,
-      callback:(response) => {
-        let user = decodeCredential(response.credential);
-        this.user = user;
-        this.loggedIn = true;
-      }
+      connection: "google",
     }
   },
-  methods: {
-    callbackck(user) {
-      this.user = user;
-      console.log(user);
-    }
+methods: {
+  ...mapMutations(['setUser','setAccessToken']),
+  signInAndGetGoogleUserCall() {
+    signInAndGetGoogleUser()
+      .then(user => {
+        console.log("User:", user);
+        console.log("Connection:", this.connection);
+        console.log("AccesToken:",user.accessToken)
+        this.setAccessToken(user.accessToken);
+        this.setUser(user); 
+      })
+      .catch(error => {
+        console.error("Erreur lors de la connexion :", error);
+      });
   }
+}
+
 }
 </script>
 
