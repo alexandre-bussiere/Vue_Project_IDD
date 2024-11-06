@@ -5,9 +5,6 @@ let msalInitialized = false; // Variable pour indiquer si MSAL est initialisé
 
 // Fonction d'initialisation de MSAL
 export async function initialize() {
-    console.log('Tenant ID:', process.env.VUE_APP_TENANT_ID);
-    console.log('Client ID:', process.env.VUE_APP_OAUTH_CLIENT_ID);
-    console.log('Redirect URI:', process.env.VUE_APP_REDIRECT_URI);
 
     if (!msalInstance) {
         msalInstance = new PublicClientApplication({

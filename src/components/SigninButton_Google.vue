@@ -1,33 +1,42 @@
-import { googleSdkLoaded } from "vue3-google-login";
-import axios from "axios";
+<template>
+  <div>
+    <button @click="signInAndGetGoogleUserCall" class="btn btn-primary">Sign in with Google</button>  
+  </div>
+</template>
+
+
+<script>
+import { mapMutations } from 'vuex';
+import { signInAndGetGoogleUser } from '../lib/googleGraph.js';
+
 export default {
-  name: "App",
+  name: 'SigninButtonGoogle',
   data() {
-    return { userDetails: null };
-  },
-  methods: {
-    login() {
-      googleSdkLoaded(google => {
-        google.accounts.oauth2.initCodeClient({
-          client_id: "YOUR_CLIENT_ID",
-          scope: "email profile openid",
-          redirect_uri: "http://localhost:8000/api/Google_login",
-          callback: response => {
-            if (response.code) {
-              this.sendCodeToBackend(response.code, response.email);
-            }
-          }
-        }).requestCode();
-      });
-    },
-    async sendCodeToBackend(code, email) {
-      try {
-        const headers = { Authorization: code, Email: email };
-        const response = await axios.post("http://localhost:8000/api/Google_login", null, { headers });
-        this.userDetails = response.data;
-      } catch (error) {
-        console.error("Failed to send authorization code:", error);
-      }
+    return {
+      user: null,
+      connection: "google",
     }
+  },
+methods: {
+  ...mapMutations(['setUser','setAccessToken']),
+  signInAndGetGoogleUserCall() {
+    signInAndGetGoogleUser()
+      .then(user => {
+        console.log("User:", user);
+        console.log("Connection:", this.connection);
+        console.log("AccesToken:",user.accessToken)
+        this.setAccessToken(user.accessToken);
+        this.setUser(user); 
+      })
+      .catch(error => {
+        console.error("Erreur lors de la connexion :", error);
+      });
   }
-};
+}
+
+}
+</script>
+
+<style scoped>
+
+</style>

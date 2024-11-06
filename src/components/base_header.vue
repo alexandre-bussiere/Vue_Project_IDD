@@ -2,14 +2,10 @@
   <header class="base-header">
     <nav>
       <ul>
-        <li>
-          <router-link v-if="user" to="/conversations">Latest Conversations</router-link>
-          <router-link v-else to="/">Home</router-link>
-        </li>
-        <li><router-link v-if="user && conversationTextId" :to="{ name: 'ConversationShow', params: { id: conversationTextId } }">
-            Conversations
-          </router-link>
-        </li>
+        <li><router-link to="/">Home</router-link></li>
+        <li><router-link to="/get-email">Get Email</router-link></li>
+        <li><router-link to="/send-email">Send Email</router-link></li>
+        <li><router-link to="/delete-email">Delete Email</router-link></li>
       </ul>
     </nav>
   </header>  
@@ -35,10 +31,7 @@ export default {
 <style scoped>
 .base-header {
   background-color: #f8f9fa;
-  padding: 1rem;
   border-bottom: 1px solid #ddd;
-
-  margin-bottom: 5rem;
 }
 
 nav ul {
@@ -47,14 +40,16 @@ nav ul {
   justify-content: space-around;
 }
 
+nav ul li {
+  font-weight: bold;
+}
+
 nav ul li a {
   text-decoration: none;
   color: #333;
-  font-weight: bold;
 }
 
 nav ul li a:hover {
   color: #00438a;
 }
-
 </style>
