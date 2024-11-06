@@ -1,56 +1,80 @@
 <template>
-  <div class="sign-in-container">
-    <img class="logo" src="../assets/Microsoft_Logo_512px.png" alt="Microsoft logo" />
-    <button @click="handleSignIn">Sign In with Microsoft</button>
-    <div v-if="user">
-      <p>Logged in as: {{ user.name }}</p>
-      <p>Email: {{ user.username }}</p>
-    </div>
+  <div v-if="!isAuthenticated">
+    <button v-if="isButtonVisible" class ="siginDiv" :disabled="isDisabled" @click="handleSignIn">Sign In</button>
   </div>
 </template>
 
 <script>
 import { initialize, signInAndGetUser } from '../lib/microsoftGraph.js';
-import { mapMutations } from 'vuex';
+import { mapMutations, mapGetters } from 'vuex';
 
-export default {
-  data() {
+export default 
+{
+  data() 
+  {
     return {
-      user: null, // Stockage des informations utilisateur
+      isDisabled: false,
+      isButtonVisible: true
     };
   },
-  mounted() {
-    initialize()
-      .then(() => {
-        console.log("MSAL Initialized and ready for use");
-      })
-      .catch(error => {
-        console.error("Failed to initialize MSAL:", error);
-      });
+  mounted() 
+  {
+    initialize();
   },
-  methods: {
-    ...mapMutations(['setUser']),
 
-    handleSignIn() {
-      initialize()
-        .then(() => {
-          return signInAndGetUser();
-        })
-        .then(user => {
-          this.setUser({
-            name: user.name,
-            username: user.username
-          });
-        })
-        .catch(error => {
-          console.error("Error during sign-in:", error);
+  computed: 
+  {
+    ...mapGetters(['getUser', 'isAuthenticated']),
+    user() 
+    {
+      return this.getUser;
+    },
+  },
+
+  methods: 
+  {
+    ...mapMutations(['setUser']),
+    async handleSignIn() 
+    {
+      try 
+      {
+        await initialize();
+        const user = await signInAndGetUser();
+        this.setUser({
+          name: user.name,
+          username: user.username,
         });
+        this.isDisabled = true;
+      } 
+      catch (error) 
+      {
+        console.error("Error during sign-in:", error);
+      }
+
     },
   },
 };
+
 </script>
 
 <style scoped>
+
+.siginDiv
+{
+  display: flex;
+  justify-content: center;
+
+}
+button {
+  background-color: #28a745;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  font-size: 20px;
+  border-radius: 5px;
+  margin: 12px;
+=======
 .sign-in-container {
   display: flex;
   align-items: center; 
@@ -72,14 +96,10 @@ button {
   border-radius: 4px;
   font-size: 14px;
   width: 200px;
+
+button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed; 
 }
 
-button:hover {
-  background-color: #45a049;
-}
-
-.logo {
-  width: 25px;
-  height: 25px;
-}
 </style>

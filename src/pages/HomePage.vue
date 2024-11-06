@@ -17,32 +17,52 @@
           <SigninButtonGoogle />
         </div>
     </div>
+    <p class="informationUser" v-else>Sign in if you want to go further on this website.</p>
+
   </div>
 </template>
 
 <script>
-import SigninButtonMicrosoft from '@/components/SigninButton_Microsoft.vue';
+import {initialize} from '../lib/microsoftGraph.js';
+import SigninButton from '../components/SigninButton_Microsoft.vue';
 import SigninButtonGoogle from '@/components/SigninButton_Google.vue';
 import SigninForm from '@/components/SigninForm.vue';
 import { mapGetters } from 'vuex';
 
-export default {
+export default 
+{
   name: 'HomePage',
+
   components: {
-    SigninButtonMicrosoft,
+    SigninButton,
     SigninButtonGoogle,
     SigninForm
   },
-  computed: {
+  computed: 
+  {
     ...mapGetters(['getUser']), 
-    user() {
+    user() 
+    {
       return this.getUser;
     }
-  }
+  },
+
+  async mounted() 
+  {
+    try
+    {
+      await initialize(); // Initialiser MSAL
+    }
+    catch (error) 
+    {
+      console.error("Error during MSAL initialization: ", error);
+    }
+  },
 };
 </script>
 
 <style scoped>
+
 .home {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   text-align: center;
@@ -70,4 +90,5 @@ export default {
   margin: 1rem;
   background-color: #f4f4f4;
 }
+
 </style>

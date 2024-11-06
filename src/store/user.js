@@ -1,17 +1,21 @@
 import { createStore } from 'vuex';
 
 const store = createStore({
-    state: {
+    state: 
+    {
         user: null,
         connection: null,
         accessToken: null,
     },
-    mutations: {
-        setUser(state, user) {
+    mutations: 
+    {
+        setUser(state, user) 
+        {
             state.user = user;
             console.log('User set:', user);
         },
-        setConversationTextId(state, id) {
+        setConversationTextId(state, id) 
+        {
             state.conversationTextId = id;
         },
         setConnection(state, connection) {
@@ -30,7 +34,8 @@ const store = createStore({
             commit('setAccessToken', accessToken);
         },
     },
-    getters: {
+    getters: 
+    {
         isAuthenticated: (state) => !!state.user,
         getUser: (state) => state.user,
         getConnection: (state) => state.connection,
