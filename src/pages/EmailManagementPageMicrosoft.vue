@@ -1,24 +1,23 @@
 <template>
     <div class = "linkDiv" v-if="user">
-        <router-link to = "/">Home</router-link>
-        <router-link to = "management">Email Management</router-link>
+      <router-link to = "/">Home</router-link>
+      <router-link to = "send">Send Email</router-link>
     </div>
-
-    <div class = "emailComponent">
-      <sendEmail/>
+    <div class = "EmailManagementDiv">
+        <EmailManagementComponent/>
     </div>
 </template>
 
 <script>
-
+import EmailManagementComponent from '@/components/emailManagementComponentMicrosoft.vue';
 import { mapGetters } from 'vuex';
-import sendEmail from '@/components/sendEmail.vue';
+
 export default 
 {
   name: 'SendEmailPage',
   components: 
   {
-    sendEmail
+    EmailManagementComponent
   },
   data() 
   {
@@ -32,9 +31,15 @@ export default
     }
   },
 };
+
 </script>
 
 <style scoped>
+.EmailManagementDiv
+{
+    margin-top:20px;
+}
+
 .linkDiv
 {
   display: flex;

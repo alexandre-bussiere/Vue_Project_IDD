@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '@/pages/HomePage.vue';
-import SendEmailPage from '@/pages/SendEmailPage.vue';
-import EmailManagementPage from '@/pages/EmailManagementPage.vue';
+import SendEmailPage from '@/pages/SendEmailPageMicrosoft.vue';
+import EmailManagementPage from '@/pages/EmailManagementPageMicrosoft.vue';
 import store from '@/store/user';
 
 const routes = [
