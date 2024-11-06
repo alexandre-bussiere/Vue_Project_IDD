@@ -21,10 +21,11 @@ const routes = [
     },
 
     {
-        path:"/Management",
-        name:"EmailManagement",
-        component:EmailManagementPage,
+        path: "/Management",
+        name: "EmailManagement",
+        component: EmailManagementPage,
         meta: { requiresAuth: true } // Guard on this page
+    },
     {
         path: '/get-email',
         name: 'GetGoogleMail',
@@ -43,29 +44,25 @@ const router = createRouter({
 });
 
 // Guard, if the user is not loggin, he can't go to conversation page
-router.beforeEach((to, from, next) => {  
-  
+router.beforeEach((to, from, next) => {
+
     // Verify if the route require a guard
-    if (to.matched.some(record => record.meta.requiresAuth)) 
-    {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
         // If the requirement of the sigin is equal to false, so if the user is not login
-        if (!store.state.user) 
-        {
-          // Go to HomePage
-          alert("You are not login, retry after being login")
-          next({ path: '/' });
-        } 
-        else 
-        {
-          // else access to conversation page
-          next();
+        if (!store.state.user) {
+            // Go to HomePage
+            alert("You are not login, retry after being login")
+            next({ path: '/' });
         }
-    } 
-    else 
-    {
-      // if no guard, let access to any page without login
-      next();
+        else {
+            // else access to conversation page
+            next();
+        }
     }
-  });
-  
-  export default router;
+    else {
+        // if no guard, let access to any page without login
+        next();
+    }
+});
+
+export default router;

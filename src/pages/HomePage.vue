@@ -1,7 +1,13 @@
 <template>
   <div class="home">
+    <div class = "linkDiv" v-if="user">
+      <router-link to = "/">Home</router-link>
+      <router-link to = "send">Send Email</router-link>
+      <router-link to ="Management">Management</router-link>
+      <router-link to ="get-email">get-email</router-link>
+      <router-link to ="send-email">send-email</router-link>
+    </div>
     <h1>Home Page</h1>
-    
     <div v-if="user">
       <p>Welcome, {{ user.name }} !</p>
     </div>
@@ -17,14 +23,12 @@
           <SigninButtonGoogle />
         </div>
     </div>
-    <p class="informationUser" v-else>Sign in if you want to go further on this website.</p>
-
   </div>
 </template>
 
 <script>
 import {initialize} from '../lib/microsoftGraph.js';
-import SigninButton from '../components/SigninButton_Microsoft.vue';
+import SigninButtonMicrosoft from '../components/SigninButton_Microsoft.vue';
 import SigninButtonGoogle from '@/components/SigninButton_Google.vue';
 import SigninForm from '@/components/SigninForm.vue';
 import { mapGetters } from 'vuex';
@@ -34,7 +38,7 @@ export default
   name: 'HomePage',
 
   components: {
-    SigninButton,
+    SigninButtonMicrosoft,
     SigninButtonGoogle,
     SigninForm
   },

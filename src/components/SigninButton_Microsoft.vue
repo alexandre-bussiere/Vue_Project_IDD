@@ -74,7 +74,7 @@ button {
   font-size: 20px;
   border-radius: 5px;
   margin: 12px;
-=======
+}
 .sign-in-container {
   display: flex;
   align-items: center; 
@@ -96,7 +96,7 @@ button {
   border-radius: 4px;
   font-size: 14px;
   width: 200px;
-
+}
 button:disabled {
   background-color: #6c757d;
   cursor: not-allowed; 
