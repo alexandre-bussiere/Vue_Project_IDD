@@ -14,15 +14,14 @@ const store = createStore({
             state.user = user;
             console.log('User set:', user);
         },
-        setConversationTextId(state, id) 
+
+        setConnection(state, connection) 
         {
-            state.conversationTextId = id;
-        },
-        setConnection(state, connection) {
             state.connection = connection;
             console.log('Connection set:', connection);
         },
-        setAccessToken(state, accessToken) {
+        setAccessToken(state, accessToken) 
+        {
             state.accessToken = accessToken;
         }
     },

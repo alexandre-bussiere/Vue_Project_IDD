@@ -1,6 +1,9 @@
 <template>
   <div v-if="!isAuthenticated">
-    <button v-if="isButtonVisible" class ="siginDiv" :disabled="isDisabled" @click="handleSignIn">Sign In</button>
+    <button v-if="isButtonVisible" class ="siginDiv" :disabled="isDisabled" @click="handleSignIn">
+      <img src="../assets/Microsoft_Logo.png" alt="Microsoft Logo" class="logo">
+      Sign In With Microsoft
+    </button>
   </div>
 </template>
 
@@ -24,16 +27,21 @@ export default
 
   computed: 
   {
-    ...mapGetters(['getUser', 'isAuthenticated']),
+    ...mapGetters(['getUser', 'isAuthenticated', 'getConnection']),
     user() 
     {
       return this.getUser;
     },
+
+    connection() 
+    {
+      return this.getConnection; 
+    }
   },
 
   methods: 
   {
-    ...mapMutations(['setUser']),
+    ...mapMutations(['setUser', 'setConnection']),
     async handleSignIn() 
     {
       try 
@@ -44,7 +52,10 @@ export default
           name: user.name,
           username: user.username,
         });
+        this.setConnection("Microsoft");
+        console.log(this.connection)
         this.isDisabled = true;
+        
       } 
       catch (error) 
       {
@@ -65,17 +76,9 @@ export default
   justify-content: center;
 
 }
-button {
-  background-color: #28a745;
-  border: none;
-  color: white;
-  padding: 12px 24px;
-  text-align: center;
-  font-size: 20px;
-  border-radius: 5px;
-  margin: 12px;
-}
-.sign-in-container {
+
+.sign-in-container 
+{
   display: flex;
   align-items: center; 
   justify-content: center; 
@@ -86,20 +89,41 @@ button {
 
 }
 
-button {
+button 
+{
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 10px;
   background-color: #4CAF50;
   color: white;
   cursor: pointer;
-  height: 30px;
+  height: 40px;
   border: none;
   border-radius: 4px;
   font-size: 14px;
-  width: 200px;
+  width: 220px;
+  font-weight: bold;
+  transition: background-color 0.3s;
 }
-button:disabled {
+
+button:hover 
+{
+  background-color: #45a049;
+}
+
+button:disabled 
+{
   background-color: #6c757d;
   cursor: not-allowed; 
 }
+
+button img.logo 
+{
+  height: 20px; /* Ajustez la taille du logo */
+  width: 20px;
+  margin-right: 10px; /* Espace entre le logo et le texte */
+}
+
 
 </style>

@@ -1,12 +1,5 @@
 <template>
   <div class="home">
-    <div class = "linkDiv" v-if="user">
-      <router-link to = "/">Home</router-link>
-      <router-link to = "send">Send Email</router-link>
-      <router-link to ="Management">Management</router-link>
-      <router-link to ="get-email">get-email</router-link>
-      <router-link to ="send-email">send-email</router-link>
-    </div>
     <h1>Home Page</h1>
     <div v-if="user">
       <p>Welcome, {{ user.name }} !</p>
@@ -15,13 +8,13 @@
       <p>Please sign in to continue.</p>
     </div>
     <div class="login-container">
-      <form class="login-form">
+      <!-- <form class="login-form">
         <SigninForm></SigninForm>
-      </form>
-        <div class="Extra-login">
-          <SigninButtonMicrosoft />
-          <SigninButtonGoogle />
-        </div>
+      </form> -->
+    </div>
+    <div class="Extra-login">
+      <SigninButtonMicrosoft />
+      <SigninButtonGoogle />
     </div>
   </div>
 </template>
@@ -30,7 +23,7 @@
 import {initialize} from '../lib/microsoftGraph.js';
 import SigninButtonMicrosoft from '../components/SigninButton_Microsoft.vue';
 import SigninButtonGoogle from '@/components/SigninButton_Google.vue';
-import SigninForm from '@/components/SigninForm.vue';
+// import SigninForm from '@/components/SigninForm.vue';
 import { mapGetters } from 'vuex';
 
 export default 
@@ -40,7 +33,7 @@ export default
   components: {
     SigninButtonMicrosoft,
     SigninButtonGoogle,
-    SigninForm
+    // SigninForm
   },
   computed: 
   {
