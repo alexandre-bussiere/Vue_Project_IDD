@@ -50,6 +50,7 @@ export default
       {
         console.error("Error during sign-in:", error);
       }
+
     },
   },
 };
@@ -57,6 +58,7 @@ export default
 </script>
 
 <style scoped>
+
 .siginDiv
 {
   display: flex;
@@ -72,17 +74,28 @@ button {
   font-size: 20px;
   border-radius: 5px;
   margin: 12px;
+=======
+.sign-in-container {
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  gap: 10px; 
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 100%;
+
 }
 
-button:hover {
-  background-color: #32d755;
-  transform: translateY(-2px);
-}
-
-button:active {
-  background-color: #282d29;
-  transform: translateY(0);
-}
+button {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  height: 30px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 200px;
 
 button:disabled {
   background-color: #6c757d;

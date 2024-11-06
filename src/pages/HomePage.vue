@@ -1,16 +1,21 @@
 <template>
-  <div class = "linkDiv" v-if="user">
-    <router-link to = "send">Send Email</router-link>
-    <router-link to = "management">Email Management</router-link>
-  </div>
-  <div class="Home">
-    <div class ="signinInHome"> 
-      <SigninButton />
+  <div class="home">
+    <h1>Home Page</h1>
+    
+    <div v-if="user">
+      <p>Welcome, {{ user.name }} !</p>
     </div>
-    <div class="informationUser" v-if="user">
-      <p>Welcome, {{ user.name }}!</p>
-      <p>If you want to send an email, click on the link "Send Email".</p>
-      <p>If you want to check your email or delete one or more emails, click on the link "Email Management".</p>
+    <div v-else>
+      <p>Please sign in to continue.</p>
+    </div>
+    <div class="login-container">
+      <form class="login-form">
+        <SigninForm></SigninForm>
+      </form>
+        <div class="Extra-login">
+          <SigninButtonMicrosoft />
+          <SigninButtonGoogle />
+        </div>
     </div>
     <p class="informationUser" v-else>Sign in if you want to go further on this website.</p>
 
@@ -20,17 +25,18 @@
 <script>
 import {initialize} from '../lib/microsoftGraph.js';
 import SigninButton from '../components/SigninButton_Microsoft.vue';
+import SigninButtonGoogle from '@/components/SigninButton_Google.vue';
+import SigninForm from '@/components/SigninForm.vue';
 import { mapGetters } from 'vuex';
 
 export default 
 {
   name: 'HomePage',
-  components: 
-  {
-    SigninButton
-  },
-  data() 
-  {
+
+  components: {
+    SigninButton,
+    SigninButtonGoogle,
+    SigninForm
   },
   computed: 
   {
@@ -57,54 +63,32 @@ export default
 
 <style scoped>
 
-.Home {
-  align-content: center;  
-  height: 50vh;  
-  min-height: 50vh
-}
-
-.linkDiv
-{
-  display: flex;
-  padding: 20px;
-  justify-content: space-around;
-  font-size: 18px;
-
-  color: #333;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  line-height: 1.6;
-}
-
-
-/* center the button signin */
-.signinInHome
-{
-  display: flex;
-  position: fixed;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%); /* If the middle of the page is not the same, it will be mouved to be at the new middle of the page*/
-  justify-content: space-around;
-}
-
-
-.informationUser 
-{
-
+.home {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   text-align: center;
-  font-size: 18px;
-  font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 15px;
+  margin-top: 60px;
+}
 
-  color: #333;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  line-height: 1.6;
+.Extra-login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-width: 300px;
+  margin: auto;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem;
+  background-color: #f4f4f4;
 }
 
 </style>

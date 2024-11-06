@@ -8,6 +8,7 @@ export async function initialize()
 {
     if (!msalInstance) 
     {
+
         msalInstance = new PublicClientApplication({
             auth: {
                 clientId: process.env.VUE_APP_OAUTH_CLIENT_ID,

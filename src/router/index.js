@@ -3,6 +3,8 @@ import HomePage from '@/pages/HomePage.vue';
 import SendEmailPage from '@/pages/SendEmailPageMicrosoft.vue';
 import EmailManagementPage from '@/pages/EmailManagementPageMicrosoft.vue';
 import store from '@/store/user';
+import GetGoogleMailPage from '@/pages/GetGoogleMailPage.vue';
+import SendGoogleMailPage from '@/pages/SendGoogleMailPage.vue';
 
 const routes = [
     {
@@ -23,6 +25,15 @@ const routes = [
         name:"EmailManagement",
         component:EmailManagementPage,
         meta: { requiresAuth: true } // Guard on this page
+    {
+        path: '/get-email',
+        name: 'GetGoogleMail',
+        component: GetGoogleMailPage
+    },
+    {
+        path: '/send-email',
+        name: 'SendGoogleMail',
+        component: SendGoogleMailPage
     }
 ];
 

@@ -3,10 +3,10 @@
     <img id ="logo" src="../assets/Mail_Logo.png" alt="description de l'image">
     <nav>
       <ul>
-        <li>Home</li>
-        <li>Get Email</li>
-        <li>Send Email</li>
-        <li>Delete Email</li>
+        <li><router-link to="/">Home</router-link></li>
+        <li><router-link to="/get-email">Get Email</router-link></li>
+        <li><router-link to="/send-email">Send Email</router-link></li>
+        <li><router-link to="/delete-email">Delete Email</router-link></li>
       </ul>
     </nav>
   </header>  
@@ -31,6 +31,7 @@ export default {
 
 <style scoped>
 .base-header {
+
   display: flex;
   justify-content: space-between; /* Sépare le logo des éléments du menu */
   align-items: center; /* Aligne verticalement les éléments */
@@ -48,6 +49,9 @@ nav {
 
 #logo {
   height: 50px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+
 }
 
 nav ul {
@@ -62,11 +66,17 @@ nav ul li {
   color: #28a745;
   cursor: pointer;
   font-size: 18px;
+
+  font-weight: bold;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
 }
 
 nav ul li:hover {
   text-decoration: underline;
 }
-
 
 </style>
