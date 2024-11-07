@@ -111,6 +111,14 @@ export default {
 </script>
 
 <style scoped>
+
+h2 {
+  font-size: 2em;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 .email-compose {
   max-width: 600px;
   margin: 0 auto;

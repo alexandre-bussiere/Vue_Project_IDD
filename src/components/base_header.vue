@@ -14,6 +14,8 @@
     </nav> 
     <br>
     <br>
+    <br>
+    <br>
 </template>
 
 <script>
