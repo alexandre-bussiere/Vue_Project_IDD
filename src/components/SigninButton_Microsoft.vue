@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isAuthenticated">
+  <div>
     <button v-if="isButtonVisible" class ="siginDiv" :disabled="isDisabled" @click="handleSignIn">
       <img src="../assets/Microsoft_Logo.png" alt="Microsoft Logo" class="logo">
       Sign In With Microsoft
