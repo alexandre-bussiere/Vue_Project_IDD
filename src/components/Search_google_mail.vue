@@ -81,16 +81,16 @@ h1 {
 
 .search-button {
   padding: 10px 15px;
-  background-color: #3498db;
+  background-color: #28a745;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
-
+  
 .search-button:hover {
-  background-color: #2980b9;
+  background-color: #32d755;
 }
 
 /* Résultats de la recherche */
