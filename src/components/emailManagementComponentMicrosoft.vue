@@ -41,7 +41,7 @@
             <p v-if="email.sender && email.sender.emailAddress">
                 <strong class="email-sender">From:</strong> 
                 {{ email.sender.emailAddress.name }}
-                <span>
+                <span class = "spanContent">
                     || 
                 </span>
                 {{email.sender.emailAddress.address}}
