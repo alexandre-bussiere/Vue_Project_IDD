@@ -9,6 +9,8 @@
         <strong class="email-subject">Subject:</strong> {{ email.subject }}<br>
         <strong class="email-sender">Sender:</strong> {{ email.sender }}<br>
         <p class="email-snippet">{{ email.snippet }}</p>
+        <br>
+        <button @click="deleteEmail(email.id)">Delete</button>
       </li>
     </ul>
     <button @click="fetchGoogleEmails">Get Google Mail</button>
@@ -18,7 +20,7 @@
 
 <script>
 import { mapGetters,mapActions  } from 'vuex';
-import { signInAndGetGoogleUser, getGoogleEmails } from '../lib/googleGraph';
+import { signInAndGetGoogleUser, getGoogleEmails, deleteGoogleEmail } from '../lib/googleGraph';
 
 export default {
   name: 'GetGoogleMailPage',
@@ -29,12 +31,14 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['setUser','setAccesToken']),
+    ...mapActions(['setUser','setAccesToken','setConnection']),
+
     async fetchGoogleEmails() {
       console.log("Start fetch")
       try {
         if (!this.accessToken) {
             const googleUser = await signInAndGetGoogleUser();
+            this.setConnection("Google");
           if (googleUser) {
             await this.$store.dispatch('updateUser', googleUser);
             await this.$store.dispatch('updateAccessToken', googleUser.accessToken);
@@ -58,6 +62,13 @@ export default {
 
     async fetchNextEmails() {
       await this.fetchGoogleEmails();
+    },
+
+    async deleteEmail(emailId) {
+      const success = await deleteGoogleEmail(emailId);
+      if (success) {
+        this.emails = this.emails.filter(email => email.id !== emailId);
+      }
     }
 
   },

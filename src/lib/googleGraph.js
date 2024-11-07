@@ -9,7 +9,7 @@ export async function initializeGoogleAuth() {
                 try {
                     const auth2 = await gapi.auth2.init({
                         client_id: GOOGLE_CLIENT_ID,
-                        scope: 'https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send'
+                        scope: 'https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/gmail.modify https://mail.google.com/'
                     });
                     await gapi.client.load('gmail', 'v1');
                     resolve(auth2);
@@ -33,6 +33,7 @@ export async function signInAndGetGoogleUser() {
             prompt: 'select_account'
         });
         const user = googleUser.getBasicProfile();
+
         return {
             id: user.getId(),
             name: user.getName(),
@@ -82,5 +83,36 @@ export async function getGoogleEmails(pageToken = null) {
     } catch (error) {
         console.error('Failed to fetch Google emails:', error);
         return { emails: [], nextPageToken: null };
+    }
+}
+
+export async function deleteGoogleEmail(emailId) {
+    try {
+        console.log("Attempting to delete email with ID:", emailId);
+        const authInstance = gapi.auth2.getAuthInstance();
+        if (!authInstance.isSignedIn.get()) {
+            console.log("User not signed in. Signing in...");
+            await authInstance.signIn();
+        }
+
+        const currentUser = authInstance.currentUser.get();
+        const grantedScopes = currentUser.getGrantedScopes();
+        console.log("Granted Scopes:", grantedScopes);
+
+        if (!grantedScopes.includes('https://www.googleapis.com/auth/gmail.modify')) {
+            throw new Error('Insufficient authentication scopes');
+        }
+
+        await gapi.client.gmail.users.messages.delete({
+            'userId': 'me',
+            'id': emailId,
+        });
+
+        console.log(`Email with ID ${emailId} deleted successfully.`);
+        return true;
+    } catch (error) {
+        console.error('Failed to delete Google email:', error);
+        console.log("Error details:", error.result ? error.result.error : error);
+        return false;
     }
 }

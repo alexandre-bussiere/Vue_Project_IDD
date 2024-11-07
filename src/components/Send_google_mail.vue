@@ -47,6 +47,7 @@ export default {
       try {
         if (!this.user){
             await signInAndGetGoogleUser();
+            this.setConnection("Google");
         }
         if (this.user) {
           const emailContent = this.createEmail(
