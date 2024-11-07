@@ -4,9 +4,9 @@
         <router-link to="/">Home</router-link>
 
         <!-- Google part -->
-        <router-link v-if="connection === 'Google'" to="/get-email">Get Email</router-link>
+        <router-link v-if="connection === 'Google'" to="/get-email">Email</router-link>
         <router-link v-if="connection === 'Google'" to="/send-email">Send Email</router-link>
-        <router-link v-if="connection === 'Google'" to="/delete-email">Delete Email</router-link>
+        <router-link v-if="connection === 'Google'" to="/search-email">Seach Email</router-link>
 
         <!-- Microsoft Part -->
         <router-link v-if="connection === 'Microsoft'" to="/send">Send Email</router-link>

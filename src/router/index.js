@@ -5,6 +5,7 @@ import EmailManagementPage from '@/pages/EmailManagementPageMicrosoft.vue';
 import store from '@/store/user';
 import GetGoogleMailPage from '@/pages/GetGoogleMailPage.vue';
 import SendGoogleMailPage from '@/pages/SendGoogleMailPage.vue';
+import SearchGoogleMailPage from '@/pages/SearchGoogleMailPage.vue'
 
 const routes = [
     {
@@ -29,12 +30,17 @@ const routes = [
     {
         path: '/get-email',
         name: 'GetGoogleMail',
-        component: GetGoogleMailPage
+        component: GetGoogleMailPage,
     },
     {
         path: '/send-email',
         name: 'SendGoogleMail',
-        component: SendGoogleMailPage
+        component: SendGoogleMailPage,
+    },
+    {
+        path: "/search-email",
+        name: 'SearchGooglemail',
+        component: SearchGoogleMailPage,
     }
 ];
 

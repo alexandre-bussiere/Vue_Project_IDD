@@ -13,7 +13,7 @@
         <button @click="deleteEmail(email.id)">Delete</button>
       </li>
     </ul>
-    <div class="controls">
+    <div class="controls" v-if="!pageToken">
       <input 
         type="number" 
         v-model.number="emailCount" 
@@ -23,7 +23,16 @@
       />
       <button @click="fetchGoogleEmails">Get Google Mail</button>
     </div>
-    <button @click="fetchNextEmails" v-if="pageToken">Load More</button>
+    <div  v-if="pageToken">
+      <input 
+          type="number" 
+          v-model.number="emailCount" 
+          min="1" 
+          placeholder="Number of emails" 
+          class="email-count-input"
+        />
+      <button @click="fetchNextEmails">Load More</button>
+    </div>
   </div>
 </template>
 

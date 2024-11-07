@@ -46,12 +46,12 @@ export async function signInAndGetGoogleUser() {
         return null;
     }
 }
-export async function getGoogleEmails(pageToken = null, maxResults = 10) {
+export async function getGoogleEmails(pageToken = null, maxResults = 10, searchQuery = '') {
     try {
         const params = {
             'userId': 'me',
             'maxResults': maxResults,
-            'q': 'in:inbox'
+            'q': searchQuery ? `in:inbox subject:${searchQuery}` : 'in:inbox'
         };
         if (pageToken) {
             params.pageToken = pageToken;
