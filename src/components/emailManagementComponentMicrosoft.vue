@@ -1,7 +1,7 @@
 <template>
     <div class="emailManagementContainer">
       <div class="controlsSection">
-        <label>Folder of emails:</label>
+        <h3>Folder of emails:</h3>
         <select v-model="selectedFolder" @change="getEmails">
           <option value="inbox">Inbox</option>
           <option value="sentitems">Sent Items</option>
@@ -13,21 +13,50 @@
     <div class="getEmailsSection">
       <div class="emailList" v-if="emails">
         <h3>{{ selectedFolder === 'inbox' ? 'Inbox' : 'Sent Items' }} Emails:</h3>
-          <ul v-for="(email, index) in emails.value" :key="index">
-            <strong>Index:</strong> {{ index + 1 +"\n"}} 
-            <br>
-            <strong>Subject:</strong> {{ email.subject || 'No subject' + "\n"}}
-            <br>
-            <strong v-if="email.toRecipients && email.toRecipients.length > 0">To:</strong> {{ email.toRecipients.map(recipient => recipient.emailAddress.address).join(', ') }}
-            <br>
-            <span v-if="email.sender && email.sender.emailAddress">
-              <strong>From: </strong>{{ email.sender.emailAddress.name }}</span>
-          </ul>
+          
+        <ul v-for="(email, index) in emails.value" :key="index">
+          <li class="email-item">
+            <p>
+              <strong>Index:</strong> {{ index + 1 +"\n"}} 
+            </p>
+
+            <p>
+              <strong>Subject:</strong> {{ email.subject || 'No subject' + "\n"}}
+            </p>
+
+            <p v-if="email.toRecipients && email.toRecipients.length > 0">
+              <strong class="email-sender">To:</strong> 
+              {{ email.toRecipients.map(recipient => recipient.emailAddress.address).join(', ') }}
+            </p>
+
+            <p v-if="email.body && email.body.content">
+                <strong class="email-sender">Content:</strong>
+                <span class = "spanContent" v-html="email.body.content"></span>
+            </p>
+            <p v-else>
+                <strong class="email-sender">Content:</strong> 
+                No content
+            </p>
+
+            <p v-if="email.sender && email.sender.emailAddress">
+                <strong class="email-sender">From:</strong> 
+                {{ email.sender.emailAddress.name }}
+                <span>
+                    || 
+                </span>
+                {{email.sender.emailAddress.address}}
+            </p>
+            <p v-else>
+                <strong class="email-sender">From:</strong> 
+                Unknown sender
+            </p>
+          </li>
+        </ul>
       </div>
     </div>
 
     <div class="deleteEmailsSection" v-if="emails">
-        <label for="emailIndex">Index of the email you want to delete:</label>
+        <h3 for="emailIndex">Index of the email you want to delete:</h3>
         <input type="number" id="emailIndex" v-model="emailIndex" placeholder="Enter email number to delete" min="1" />
       <button class = "button" @click="deleteEmailByIndex" v-if="user">Delete Email</button>
     </div>
@@ -124,7 +153,8 @@ export default
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.controlsSection 
+.controlsSection,
+.deleteEmailsSection  
 {
   display: flex;
   flex-direction: column;
@@ -132,13 +162,20 @@ export default
   padding: 20px;
   border-radius: 8px;
   margin-right: 10px;
-  width:180px;
+  width: 20%;
+  text-align: center; 
+  flex-shrink: 0;
 }
 
+.spanContent
+{
+  font-size: 18px;
+}
 .controlsSection label 
 {
   font-weight: bold;
   text-align: center;
+  font-size: 20px;
 }
 
 .controlsSection select 
@@ -152,14 +189,15 @@ export default
 
 .getEmailsSection
 {
-  width: 48%;
+  width: 40%;
+  flex-grow: 1;
   margin-top: 20px;
+  box-sizing: border-box;
 }
-.deleteEmailsSection 
+
+.controlsSection h3
 {
-  width: 48%;
-  margin-top: 20px;
-  text-align: center; 
+  font-size: 18px;
 }
 
 .getEmailsSection h3,
@@ -167,6 +205,7 @@ export default
 {
   text-align: center;
   color: #333;
+  font-size: 18px;
 }
 
 .deleteEmailsSection label,
@@ -174,7 +213,8 @@ export default
 .deleteEmailsSection .button 
 {
   display: block;
-  margin: 10px auto; /* Centre les éléments individuellement */
+  margin: 10px auto;
+  font-size: 18px;
 }
 
 input[type="number"] 
@@ -198,13 +238,22 @@ input[type="number"]
   padding: 0;
 }
 
-.emailList ul li 
+.email-item 
 {
-  background-color: #fff;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+}
+
+.email-item p,
+.email-item strong 
+{
+  margin: 0;
+  padding: 0;
 }
 
 .emailList ul li strong 
@@ -212,13 +261,14 @@ input[type="number"]
   color: #333;
 }
 
+.email
 .modifiedButton
 {
   background-color: #28a745;
   border: none;
   color: white;
   padding: 12px 24px;
-  font-size: 20px;
+  font-size: 18px;
   border-radius: 5px;
   margin:0%;
 }

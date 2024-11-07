@@ -5,11 +5,12 @@
         <!-- Google part -->
         <router-link v-if="connection === 'Google'" to="/get-email">Email</router-link>
         <router-link v-if="connection === 'Google'" to="/send-email">Send Email</router-link>
-        <router-link v-if="connection === 'Google'" to="/search-email">Seach Email</router-link>
+        <router-link v-if="connection === 'Google'" to="/search-email">Search Email</router-link>
 
         <!-- Microsoft Part -->
         <router-link v-if="connection === 'Microsoft'" to="/send">Send Email</router-link>
         <router-link v-if="connection === 'Microsoft'" to="/management">Email Management</router-link>
+        <router-link v-if="connection === 'Microsoft'" to="/search">Search Email</router-link>
     </nav> 
     <br>
     <br>
@@ -74,6 +75,7 @@ nav.linkNav a {
   padding: 10px 20px;
   border-radius: 5px;
   transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 18px;
 }
 
 /* Couleur de fond lors du survol */

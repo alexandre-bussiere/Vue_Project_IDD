@@ -117,7 +117,7 @@ export async function getUserProfile()
 
 
 // Read mails
-export async function readEmails(folder = "inbox") 
+export async function readEmails(folder = "inbox", searchQuery = '') 
 {
   const accessToken = await acquireToken();
   if (!accessToken) 
@@ -127,19 +127,30 @@ export async function readEmails(folder = "inbox")
 
   try 
   {
-    const response = await axios.get(`https://graph.microsoft.com/v1.0/me/mailFolders/${folder}/messages`,  //To access to emails in the inbox or sent folder
+    const params = {
+      "$top": 15, // 15 emails maximum
+    };
+
+    // Sort if no search 
+    if (!searchQuery) 
+    {
+      params["$orderby"] = "receivedDateTime desc"; // Order by receive date
+    } 
+    
+    else 
+    {
+      params["$search"] = `"${searchQuery}"`;  // Search only if the user ask for
+    }
+
+    const response = await axios.get(`https://graph.microsoft.com/v1.0/me/mailFolders/${folder}/messages`, //To access to emails in the inbox or sent folder
     {
       headers: { Authorization: `Bearer ${accessToken}` },
-      params: {
-        "$orderby": "receivedDateTime desc", // Trie les emails par date de réception
-        "$top": 15 // Limite à 15 emails
-      }
+      params: params
     });
-    console.log("Emails from folder:", folder, response.data);
+
     return response.data;
   } 
-  catch (error) 
-  {
+  catch (error) {
     console.error("Error reading emails:", error.response ? error.response.data : error.message);
     throw error;
   }

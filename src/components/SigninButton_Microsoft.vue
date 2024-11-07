@@ -53,7 +53,6 @@ export default
           username: user.username,
         });
         this.setConnection("Microsoft");
-        console.log(this.connection)
         this.isDisabled = true;
         
       } 

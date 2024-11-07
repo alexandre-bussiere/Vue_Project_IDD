@@ -2,10 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '@/pages/HomePage.vue';
 import SendEmailPage from '@/pages/SendEmailPageMicrosoft.vue';
 import EmailManagementPage from '@/pages/EmailManagementPageMicrosoft.vue';
+import SearchMicrosoftMail from '@/components/SearchMicrosoftMail.vue';
 import store from '@/store/user';
 import GetGoogleMailPage from '@/pages/GetGoogleMailPage.vue';
 import SendGoogleMailPage from '@/pages/SendGoogleMailPage.vue';
 import SearchGoogleMailPage from '@/pages/SearchGoogleMailPage.vue'
+
+
 
 const routes = [
     {
@@ -27,20 +30,31 @@ const routes = [
         component: EmailManagementPage,
         meta: { requiresAuth: true } // Guard on this page
     },
+
+    {
+        path: "/search",
+        name: "SearchEmail",
+        component: SearchMicrosoftMail,
+        meta: { requiresAuth: true } // Guard on this page
+    },
+
     {
         path: '/get-email',
         name: 'GetGoogleMail',
         component: GetGoogleMailPage,
+        meta: { requiresAuth: true }
     },
     {
         path: '/send-email',
         name: 'SendGoogleMail',
         component: SendGoogleMailPage,
+        meta: { requiresAuth: true }
     },
     {
         path: "/search-email",
         name: 'SearchGooglemail',
         component: SearchGoogleMailPage,
+        meta: { requiresAuth: true }
     }
 ];
 

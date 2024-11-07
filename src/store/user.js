@@ -12,13 +12,11 @@ const store = createStore({
         setUser(state, user) 
         {
             state.user = user;
-            console.log('User set:', user);
         },
 
         setConnection(state, connection) 
         {
             state.connection = connection;
-            console.log('Connection set:', connection);
         },
         setAccessToken(state, accessToken) 
         {

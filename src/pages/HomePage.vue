@@ -8,9 +8,6 @@
       <p>Please sign in to continue.</p>
     </div>
     <div class="login-container">
-      <!-- <form class="login-form">
-        <SigninForm></SigninForm>
-      </form> -->
     </div>
     <div class="Extra-login">
       <SigninButtonMicrosoft />
@@ -23,17 +20,16 @@
 import {initialize} from '../lib/microsoftGraph.js';
 import SigninButtonMicrosoft from '../components/SigninButton_Microsoft.vue';
 import SigninButtonGoogle from '@/components/SigninButton_Google.vue';
-// import SigninForm from '@/components/SigninForm.vue';
 import { mapGetters } from 'vuex';
 
 export default 
 {
   name: 'HomePage',
 
-  components: {
+  components: 
+  {
     SigninButtonMicrosoft,
     SigninButtonGoogle,
-    // SigninForm
   },
   computed: 
   {
