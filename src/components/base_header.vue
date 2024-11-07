@@ -39,68 +39,36 @@ export default
 </script>
 
 <style scoped>
-.linkNav
-{
-  display: flex;
-  padding: 20px;
-  justify-content: space-around;
-  font-size: 18px;
-
-  color: #333;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  line-height: 1.6;
-}
-
-.base-header 
-{
-
-  display: flex;
-  justify-content: space-between; /* Sépare le logo des éléments du menu */
-  align-items: center; /* Aligne verticalement les éléments */
-  background-color: #c8cacc;
-  padding: 12px 24px;
-  border-bottom: 1px solid #ddd;
-  
-}
-
-nav {
+/* Conteneur de navigation */
+nav.linkNav {
   display: flex;
   justify-content: center;
-  align-items: center;
+  gap: 15px;
+  background-color: #2c3e50;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-#logo {
-  height: 50px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #ddd;
-
-}
-
-nav ul {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-nav ul li {
-  margin: 0 20px;
-  color: #28a745;
-  cursor: pointer;
-  font-size: 18px;
-
-  font-weight: bold;
-}
-
-nav ul li a {
+/* Lien de navigation */
+nav.linkNav a {
+  color: #ecf0f1;
   text-decoration: none;
-  color: #333;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-nav ul li:hover {
-  text-decoration: underline;
+nav.linkNav a:hover {
+  background-color: #34495e;
+  color: #fff;
 }
 
+/* Lien actif */
+nav.linkNav a.router-link-exact-active {
+  background-color: #3498db;
+  color: #fff;
+}
 </style>
+

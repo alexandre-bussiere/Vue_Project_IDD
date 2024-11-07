@@ -46,11 +46,11 @@ export async function signInAndGetGoogleUser() {
         return null;
     }
 }
-export async function getGoogleEmails(pageToken = null) {
+export async function getGoogleEmails(pageToken = null, maxResults = 10) {
     try {
         const params = {
             'userId': 'me',
-            'maxResults': 10,
+            'maxResults': maxResults,
             'q': 'in:inbox'
         };
         if (pageToken) {

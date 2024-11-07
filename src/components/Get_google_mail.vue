@@ -13,7 +13,16 @@
         <button @click="deleteEmail(email.id)">Delete</button>
       </li>
     </ul>
-    <button @click="fetchGoogleEmails">Get Google Mail</button>
+    <div class="controls">
+      <input 
+        type="number" 
+        v-model.number="emailCount" 
+        min="1" 
+        placeholder="Number of emails" 
+        class="email-count-input"
+      />
+      <button @click="fetchGoogleEmails">Get Google Mail</button>
+    </div>
     <button @click="fetchNextEmails" v-if="pageToken">Load More</button>
   </div>
 </template>
@@ -50,7 +59,7 @@ export default {
 
         if (this.accessToken) {
 
-          const response = await getGoogleEmails(this.pageToken); // Pass the current page token
+          const response = await getGoogleEmails(this.pageToken, this.emailCount); // Pass the current page token
           this.emails = response.emails; // Replace with the fetched emails
           this.pageToken = response.nextPageToken; // Set the next page token for pagination
         }
@@ -94,35 +103,89 @@ export default {
 
 </script>
 <style scoped>
-h1 {
-  font-size: 24px;
-  margin-bottom: 16px;
-  color: #333;
+/* Conteneur principal */
+div {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
+/* Titre principal */
+h1 {
+  font-size: 2em;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Liste des emails */
 .email-list {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .email-item {
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #f9f9f9;
 }
 
-.email-item:last-child {
-  border-bottom: none;
-}
-
-.email-subject,
-.email-sender {
-  color: #555;
+.email-subject {
   font-weight: bold;
+  color: #2c3e50;
+}
+
+.email-sender {
+  color: #34495e;
+  font-weight: bold;
+  margin-top: 5px;
 }
 
 .email-snippet {
-  color: #666;
-  margin-top: 4px;
+  color: #555;
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+/* Bouton de suppression */
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #ddd;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+
+/* Contrôles */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.email-count-input {
+  padding: 8px;
+  width: 120px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 </style>
