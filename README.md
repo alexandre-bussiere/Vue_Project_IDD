@@ -75,10 +75,10 @@ This endpoint will allow you to access the page SearchMicrosoftmail page to sear
 With Google you will have to access the endpoint:
 
 ### /get-emails
-This endpoint will allow you to access the page GetGoogleMail page to get your emails, but also delete emails, once you are connected with your Google account
+This endpoint allows you to access the GetGoogleMail page to view your emails and delete them once you're connected to your Google account. Clicking on an email will display its content.
 
 ### /send-email
 This endpoint will allow you to access the page SendGoogleEmail page to send emails from the website with your Google account
 
 ### /search
-This endpoint will allow you to access the page SearchGoogleMailPage to search emails using keywords from one or more emails, from the website with your Google account
+This endpoint will allow you to access the page SearchGoogleMailPage to search emails using keywords from one or more emails, from the website with your Google account. Clicking on an email will display its content.
