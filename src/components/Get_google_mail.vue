@@ -5,12 +5,20 @@
       <p>Here are your emails, {{ user.name }}</p>
     </div>
     <ul class="email-list">
-      <li v-for="email in emails" :key="email.id" class="email-item">
+      <li 
+        v-for="email in emails" 
+        :key="email.id" 
+        class="email-item" 
+        @click="loadEmailBody(email.id)"
+      >
         <strong class="email-subject">Subject:</strong> {{ email.subject }}<br>
         <strong class="email-sender">Sender:</strong> {{ email.sender }}<br>
         <p class="email-snippet">{{ email.snippet }}</p>
-        <br>
-        <button @click="deleteEmail(email.id)">Delete</button>
+
+        <!-- Affiche le corps de l'email lorsque l'e-mail est ouvert -->
+        <div v-if="email.id === activeEmailId" class="email-body" v-html="email.body"></div>
+
+        <button @click.stop="deleteEmail(email.id)">Delete</button>
       </li>
     </ul>
     <div class="controls" v-if="!pageToken">
@@ -23,21 +31,21 @@
       />
       <button @click="fetchGoogleEmails">Get Google Mail</button>
     </div>
-    <div  v-if="pageToken">
+    <div v-if="pageToken">
       <input 
-          type="number" 
-          v-model.number="emailCount" 
-          min="1" 
-          placeholder="Number of emails" 
-          class="email-count-input"
-        />
+        type="number" 
+        v-model.number="emailCount" 
+        min="1" 
+        placeholder="Number of emails" 
+        class="email-count-input"
+      />
       <button @click="fetchNextEmails">Load More</button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters,mapActions  } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { signInAndGetGoogleUser, getGoogleEmails, deleteGoogleEmail } from '../lib/googleGraph';
 
 export default {
@@ -46,36 +54,33 @@ export default {
     return {
       emails: [],
       pageToken: null,
+      activeEmailId: null, // ID de l'e-mail actuellement ouvert
     };
   },
   methods: {
-    ...mapActions(['setUser','setAccesToken','setConnection']),
+    ...mapActions(['setUser', 'setAccesToken', 'setConnection']),
 
     async fetchGoogleEmails() {
-      console.log("Start fetch")
+      console.log("Start fetch");
       try {
         if (!this.accessToken) {
-            const googleUser = await signInAndGetGoogleUser();
-            this.setConnection("Google");
+          const googleUser = await signInAndGetGoogleUser();
+          this.setConnection("Google");
           if (googleUser) {
             await this.$store.dispatch('updateUser', googleUser);
             await this.$store.dispatch('updateAccessToken', googleUser.accessToken);
-            console.log("User", this.getUser);
-            console.log("AccesToken", this.getAccessToken)
-            console.log(this.$store.state.accessToken)
           }
         }
 
         if (this.accessToken) {
-
-          const response = await getGoogleEmails(this.pageToken, this.emailCount); // Pass the current page token
-          this.emails = response.emails; // Replace with the fetched emails
-          this.pageToken = response.nextPageToken; // Set the next page token for pagination
+          const response = await getGoogleEmails(this.pageToken, this.emailCount);
+          this.emails = response.emails;
+          this.pageToken = response.nextPageToken;
         }
       } catch (error) {
         console.error("Error fetching emails:", error);
       }
-    console.log("End fetch")
+      console.log("End fetch");
     },
 
     async fetchNextEmails() {
@@ -87,30 +92,46 @@ export default {
       if (success) {
         this.emails = this.emails.filter(email => email.id !== emailId);
       }
-    }
+    },
 
+    async loadEmailBody(emailId) {
+      // Trouver l'e-mail dans la liste
+      const email = this.emails.find(email => email.id === emailId);
+      if (!email) return;
+
+      // Charger le corps complet de l'e-mail s'il n'a pas encore été chargé
+      if (!email.body) {
+        try {
+          const fullEmail = await getGoogleEmails(null, 1, emailId); // Appelle une fonction pour obtenir l'email complet
+          email.body = fullEmail.emails[0].body;
+          this.activeEmailId = emailId; // Définit cet e-mail comme l'actif
+        } catch (error) {
+          console.error("Failed to load email body:", error);
+        }
+      } else {
+        // Bascule entre l'affichage de l'e-mail actuel et la fermeture
+        this.activeEmailId = this.activeEmailId === emailId ? null : emailId;
+      }
+    },
   },
   
   async mounted() {
-    console.log('Component mounted')
-    console.log('User :',this.user)
-    console.log("AccesToken",this.accessToken)
-    if(this.user){
+    if (this.user) {
       await this.fetchGoogleEmails();
     }
   },
   computed: {
-    ...mapGetters(['getUser','getAccessToken']), 
+    ...mapGetters(['getUser', 'getAccessToken']), 
     user() {
       return this.getUser;
     },
-    accessToken(){
+    accessToken() {
       return this.getAccessToken;
-    }
+    },
   }
 };
-
 </script>
+
 <style scoped>
 /* Conteneur principal */
 div {
@@ -141,6 +162,7 @@ h1 {
   padding: 15px;
   margin-bottom: 15px;
   background-color: #f9f9f9;
+  cursor: pointer;
 }
 
 .email-subject {
@@ -158,6 +180,16 @@ h1 {
   color: #555;
   font-size: 0.9em;
   margin-top: 10px;
+}
+
+/* Affichage du corps de l'email */
+.email-body {
+  margin-top: 10px;
+  color: #333;
+  font-size: 0.9em;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 /* Bouton de suppression */
@@ -180,7 +212,6 @@ button:focus {
 button:active {
   transform: scale(0.98);
 }
-
 
 /* Contrôles */
 .controls {

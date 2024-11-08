@@ -8,8 +8,8 @@
         <router-link v-if="connection === 'Google'" to="/search-email">Search Email</router-link>
 
         <!-- Microsoft Part -->
+        <router-link v-if="connection === 'Microsoft'" to="/management">Email</router-link>
         <router-link v-if="connection === 'Microsoft'" to="/send">Send Email</router-link>
-        <router-link v-if="connection === 'Microsoft'" to="/management">Email Management</router-link>
         <router-link v-if="connection === 'Microsoft'" to="/search">Search Email</router-link>
     </nav> 
     <br>

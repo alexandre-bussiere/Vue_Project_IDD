@@ -35,6 +35,7 @@ methods:
         this.setAccessToken(user.accessToken);
         this.setUser(user); 
         this.setConnection("Google");
+        this.$router.push({ path: '/get-email' });
       })
       .catch(error => {
         console.error("Erreur lors de la connexion :", error);

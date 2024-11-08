@@ -1,4 +1,5 @@
 import { gapi } from 'gapi-script';
+import DOMPurify from 'dompurify';
 
 const GOOGLE_CLIENT_ID = process.env.VUE_APP_CLIENT_ID_GOOGLE;
 
@@ -68,11 +69,31 @@ export async function getGoogleEmails(pageToken = null, maxResults = 10, searchQ
                 'id': message.id,
             });
 
+            const headers = email.result.payload.headers;
+            const subject = headers.find(header => header.name === 'Subject')?.value;
+            const sender = headers.find(header => header.name === 'From')?.value;
+
+            let body = '';
+            const parts = email.result.payload.parts || [email.result.payload];
+
+            for (const part of parts) {
+                if (part.mimeType === 'text/html') {
+                    body = part.body.data;
+                    break;
+                } else if (part.mimeType === 'text/plain') {
+                    body = part.body.data;
+                }
+            }
+
+            const decodedBody = body ? atob(body.replace(/-/g, '+').replace(/_/g, '/')) : '';
+            const sanitizedBody = DOMPurify.sanitize(decodedBody); // Sanitize the HTML
+
             emails.push({
                 id: message.id,
                 snippet: email.result.snippet,
-                subject: email.result.payload.headers.find(header => header.name === 'Subject')?.value,
-                sender: email.result.payload.headers.find(header => header.name === 'From')?.value,
+                subject: subject,
+                sender: sender,
+                body: sanitizedBody, // Use sanitized HTML content
             });
         }
 
@@ -85,6 +106,7 @@ export async function getGoogleEmails(pageToken = null, maxResults = 10, searchQ
         return { emails: [], nextPageToken: null };
     }
 }
+
 
 export async function deleteGoogleEmail(emailId) {
     try {

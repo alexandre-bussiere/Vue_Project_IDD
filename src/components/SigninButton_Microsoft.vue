@@ -54,6 +54,7 @@ export default
         });
         this.setConnection("Microsoft");
         this.isDisabled = true;
+        this.$router.push({ path: '/Management' });
         
       } 
       catch (error) 

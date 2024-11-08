@@ -11,6 +11,7 @@
     "@azure/msal-browser": "^3.25.0",
     "axios": "^1.7.7",
     "core-js": "^3.8.3",
+    "dompurify": "^3.1.7",
     "font-awesome": "^4.7.0",
     "gapi-script": "^1.2.0",
     "googleapi": "^1.0.2",

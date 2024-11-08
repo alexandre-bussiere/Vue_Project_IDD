@@ -10,12 +10,19 @@
       />
       <button @click="searchEmails" class="search-button">Search</button>
     </div>
-
     <ul class="email-results" v-if="emails.length">
-      <li v-for="email in emails" :key="email.id" class="email-item">
+      <li 
+        v-for="email in emails" 
+        :key="email.id" 
+        class="email-item" 
+        @click="loadEmailBody(email.id)"
+      >
         <strong class="email-subject">Subject:</strong> {{ email.subject }}<br>
         <strong class="email-sender">Sender:</strong> {{ email.sender }}<br>
         <p class="email-snippet">{{ email.snippet }}</p>
+
+        <!-- Affiche le corps de l'email lorsque l'e-mail est ouvert -->
+        <div v-if="email.id === activeEmailId" class="email-body" v-html="email.body"></div>
       </li>
     </ul>
     
@@ -30,7 +37,8 @@ export default {
     return {
       searchQuery: "",
       emails: [],
-      searchPerformed: false
+      searchPerformed: false,
+      activeEmailId: null, // ID de l'e-mail actuellement ouvert
     };
   },
   methods: {
@@ -42,8 +50,27 @@ export default {
         this.emails = response.emails;
         this.searchPerformed = true;
         console.log("searchEmails end")
-    }
-  }
+    },
+    async loadEmailBody(emailId) {
+      // Trouver l'e-mail dans la liste
+      const email = this.emails.find(email => email.id === emailId);
+      if (!email) return;
+
+      // Charger le corps complet de l'e-mail s'il n'a pas encore été chargé
+      if (!email.body) {
+        try {
+          const fullEmail = await getGoogleEmails(null, 1, emailId); // Appelle une fonction pour obtenir l'email complet
+          email.body = fullEmail.emails[0].body;
+          this.activeEmailId = emailId; // Définit cet e-mail comme l'actif
+        } catch (error) {
+          console.error("Failed to load email body:", error);
+        }
+      } else {
+        // Bascule entre l'affichage de l'e-mail actuel et la fermeture
+        this.activeEmailId = this.activeEmailId === emailId ? null : emailId;
+      }
+    },
+  },
 };
 </script>
 
