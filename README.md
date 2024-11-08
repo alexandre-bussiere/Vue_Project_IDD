@@ -1,4 +1,4 @@
-# vue-oauth-microsoft-graph
+# Vue_Project_IDD
 In this repository you will find a web service to manage your emails.
 Once on the website, you can connect to your Microsoft or Google account, to access the functionalities. 
 If you don’t log in to an account, the website will just show you the home page.
@@ -42,7 +42,7 @@ VUE_APP_REDIRECT_URI=http://localhost:8081
 VUE_APP_CLIENT_ID_GOOGLE=your-personal-key-for-Google**  
 
 
-# RUN THIS PROJECT
+# Run this project
 
 ## Compiles and hot-reloads for development
 To **compile and run the project**, from the Vue_Project_IDD folder, open a terminal and run the command:
@@ -55,7 +55,7 @@ npm run serve
 npm run build
 ```
 
-# ENDPOINTS
+# Endpoints
 Note that you will be **on localhost:8081** when you launch the project.
 From this localhost:8081, once you are connected to Microsoft or Google account, you will be able to access **other endpoints** with links (router-link) that are at the **top of the website** (in the header of the website), to use the various functionalities of this project.
 
