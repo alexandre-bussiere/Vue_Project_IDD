@@ -112,34 +112,45 @@ export default {
 
 <style scoped>
 
-h2 {
-  font-size: 2em;
-  color: #333;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
 .email-compose {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align the form */
 }
+
+form {
+  width: 100%; /* Ensure the form takes full width within the centered container */
+}
+
 .form-group {
+  width: 100%; /* Make form-group take full width */
   margin-bottom: 15px;
 }
+
 input, textarea {
-  width: 100%;
+  width: 100%; /* Make input and textarea take full width of .form-group */
   padding: 8px;
   margin-top: 5px;
   box-sizing: border-box;
 }
+
 button {
   padding: 10px 20px;
+  margin-top: 10px;
 }
+
 .success {
   color: green;
+  text-align: center;
 }
+
 .error {
   color: red;
+  text-align: center;
 }
+
 </style>
