@@ -36,10 +36,10 @@ This file will have all **your API keys to connect to your Microsoft or Google a
 
 You must follow this format for the contents of this file:
 
-**VUE_APP_OAUTH_CLIENT_ID=your-personal-key-for-Microsoft
-VUE_APP_TENANT_ID=common
-VUE_APP_REDIRECT_URI=http://localhost:8081
-VUE_APP_CLIENT_ID_GOOGLE=your-personal-key-for-Google**
+**VUE_APP_OAUTH_CLIENT_ID=your-personal-key-for-Microsoft  
+VUE_APP_TENANT_ID=common  
+VUE_APP_REDIRECT_URI=http://localhost:8081  
+VUE_APP_CLIENT_ID_GOOGLE=your-personal-key-for-Google**  
 
 
 # RUN THIS PROJECT
